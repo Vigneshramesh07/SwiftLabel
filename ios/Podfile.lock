@@ -1,0 +1,157 @@
+PODS:
+  - app_links (6.4.1):
+    - Flutter
+  - DKImagePickerController/Core (4.3.9):
+    - DKImagePickerController/ImageDataManager
+    - DKImagePickerController/Resource
+  - DKImagePickerController/ImageDataManager (4.3.9)
+  - DKImagePickerController/PhotoGallery (4.3.9):
+    - DKImagePickerController/Core
+    - DKPhotoGallery
+  - DKImagePickerController/Resource (4.3.9)
+  - DKPhotoGallery (0.0.19):
+    - DKPhotoGallery/Core (= 0.0.19)
+    - DKPhotoGallery/Model (= 0.0.19)
+    - DKPhotoGallery/Preview (= 0.0.19)
+    - DKPhotoGallery/Resource (= 0.0.19)
+    - SDWebImage
+    - SwiftyGif
+  - DKPhotoGallery/Core (0.0.19):
+    - DKPhotoGallery/Model
+    - DKPhotoGallery/Preview
+    - SDWebImage
+    - SwiftyGif
+  - DKPhotoGallery/Model (0.0.19):
+    - SDWebImage
+    - SwiftyGif
+  - DKPhotoGallery/Preview (0.0.19):
+    - DKPhotoGallery/Model
+    - DKPhotoGallery/Resource
+    - SDWebImage
+    - SwiftyGif
+  - DKPhotoGallery/Resource (0.0.19):
+    - SDWebImage
+    - SwiftyGif
+  - file_picker (0.0.1):
+    - DKImagePickerController/PhotoGallery
+    - Flutter
+  - Flutter (1.0.0)
+  - image_picker_ios (0.0.1):
+    - Flutter
+  - path_provider_foundation (0.0.1):
+    - Flutter
+    - FlutterMacOS
+  - SDWebImage (5.21.7):
+    - SDWebImage/Core (= 5.21.7)
+  - SDWebImage/Core (5.21.7)
+  - shared_preferences_foundation (0.0.1):
+    - Flutter
+    - FlutterMacOS
+  - Stripe (23.27.6):
+    - StripeApplePay (= 23.27.6)
+    - StripeCore (= 23.27.6)
+    - StripePayments (= 23.27.6)
+    - StripePaymentsUI (= 23.27.6)
+    - StripeUICore (= 23.27.6)
+  - stripe_ios (0.0.1):
+    - Flutter
+    - Stripe (~> 23.27.0)
+    - StripeApplePay (~> 23.27.0)
+    - StripeFinancialConnections (~> 23.27.0)
+    - StripePayments (~> 23.27.0)
+    - StripePaymentSheet (~> 23.27.0)
+    - StripePaymentsUI (~> 23.27.0)
+  - StripeApplePay (23.27.6):
+    - StripeCore (= 23.27.6)
+  - StripeCore (23.27.6)
+  - StripeFinancialConnections (23.27.6):
+    - StripeCore (= 23.27.6)
+    - StripeUICore (= 23.27.6)
+  - StripePayments (23.27.6):
+    - StripeCore (= 23.27.6)
+    - StripePayments/Stripe3DS2 (= 23.27.6)
+  - StripePayments/Stripe3DS2 (23.27.6):
+    - StripeCore (= 23.27.6)
+  - StripePaymentSheet (23.27.6):
+    - StripeApplePay (= 23.27.6)
+    - StripeCore (= 23.27.6)
+    - StripePayments (= 23.27.6)
+    - StripePaymentsUI (= 23.27.6)
+  - StripePaymentsUI (23.27.6):
+    - StripeCore (= 23.27.6)
+    - StripePayments (= 23.27.6)
+    - StripeUICore (= 23.27.6)
+  - StripeUICore (23.27.6):
+    - StripeCore (= 23.27.6)
+  - SwiftyGif (5.4.5)
+  - url_launcher_ios (0.0.1):
+    - Flutter
+
+DEPENDENCIES:
+  - app_links (from `.symlinks/plugins/app_links/ios`)
+  - file_picker (from `.symlinks/plugins/file_picker/ios`)
+  - Flutter (from `Flutter`)
+  - image_picker_ios (from `.symlinks/plugins/image_picker_ios/ios`)
+  - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
+  - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
+  - stripe_ios (from `.symlinks/plugins/stripe_ios/ios`)
+  - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
+
+SPEC REPOS:
+  trunk:
+    - DKImagePickerController
+    - DKPhotoGallery
+    - SDWebImage
+    - Stripe
+    - StripeApplePay
+    - StripeCore
+    - StripeFinancialConnections
+    - StripePayments
+    - StripePaymentSheet
+    - StripePaymentsUI
+    - StripeUICore
+    - SwiftyGif
+
+EXTERNAL SOURCES:
+  app_links:
+    :path: ".symlinks/plugins/app_links/ios"
+  file_picker:
+    :path: ".symlinks/plugins/file_picker/ios"
+  Flutter:
+    :path: Flutter
+  image_picker_ios:
+    :path: ".symlinks/plugins/image_picker_ios/ios"
+  path_provider_foundation:
+    :path: ".symlinks/plugins/path_provider_foundation/darwin"
+  shared_preferences_foundation:
+    :path: ".symlinks/plugins/shared_preferences_foundation/darwin"
+  stripe_ios:
+    :path: ".symlinks/plugins/stripe_ios/ios"
+  url_launcher_ios:
+    :path: ".symlinks/plugins/url_launcher_ios/ios"
+
+SPEC CHECKSUMS:
+  app_links: 3dbc685f76b1693c66a6d9dd1e9ab6f73d97dc0a
+  DKImagePickerController: 946cec48c7873164274ecc4624d19e3da4c1ef3c
+  DKPhotoGallery: b3834fecb755ee09a593d7c9e389d8b5d6deed60
+  file_picker: a0560bc09d61de87f12d246fc47d2119e6ef37be
+  Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
+  image_picker_ios: 7fe1ff8e34c1790d6fff70a32484959f563a928a
+  path_provider_foundation: 080d55be775b7414fd5a5ef3ac137b97b097e564
+  SDWebImage: e9fc87c1aab89a8ab1bbd74eba378c6f53be8abf
+  shared_preferences_foundation: 9e1978ff2562383bd5676f64ec4e9aa8fa06a6f7
+  Stripe: 9fec845645e39f371e6898926d096fd9c2feb5a5
+  stripe_ios: 5accba1ff472f89300e1676c351166f29dc93ced
+  StripeApplePay: 5f017e8dfe259fafbab70137776189deef754bb2
+  StripeCore: 01ec57f0dddfe742054dc6a322f811426c25313d
+  StripeFinancialConnections: 56698cb6274bf89fb8c76b934f6156f368e97765
+  StripePayments: 6adf11faf1b7038e77aa97019410305c6adca79d
+  StripePaymentSheet: 3eaf870c4388e44b0cc37e4c69d00b6957fd8bd7
+  StripePaymentsUI: 59ccddeacad592b09fa67e8d641340820ddb4751
+  StripeUICore: 879bbf5889265db13f52fac8aad7a176ba62481f
+  SwiftyGif: 706c60cf65fa2bc5ee0313beece843c8eb8194d4
+  url_launcher_ios: 694010445543906933d732453a59da0a173ae33d
+
+PODFILE CHECKSUM: a57f30d18f102dd3ce366b1d62a55ecbef2158e5
+
+COCOAPODS: 1.16.2

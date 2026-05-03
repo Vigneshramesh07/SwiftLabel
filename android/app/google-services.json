@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "529836317098",
+    "project_id": "swiftlabel-16800",
+    "storage_bucket": "swiftlabel-16800.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:529836317098:android:5f2dfd03d03bb49e8573d3",
+        "android_client_info": {
+          "package_name": "com.swiftlabel.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB7tpuhou-Ben7YxNmPw0b91Wsx0Qjhm-k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
