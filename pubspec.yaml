@@ -12,6 +12,7 @@ dependencies:
   provider: ^6.1.2
   http: ^1.2.0
   shared_preferences: ^2.3.2
+  app_tracking_transparency: ^2.0.4
   supabase_flutter: ^2.5.0
   image_picker: ^1.1.2
   url_launcher: ^6.3.0
