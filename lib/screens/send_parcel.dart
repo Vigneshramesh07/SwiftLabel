@@ -437,8 +437,7 @@ class _SendParcelScreenState extends State<SendParcelScreen> {
             const SizedBox(height: 20),
             Text(
               success ? 'Payment Successful!' : 'Payment Failed',
-              style: TextStyle(
-                fontFamily: 'Syne', fontSize: 22, fontWeight: FontWeight.w800,
+              style: TextStyle( fontSize: 26, fontWeight: FontWeight.w800,
                 color: success ? const Color(0xFF059669) : Colors.red,
               ),
               textAlign: TextAlign.center,
@@ -490,7 +489,7 @@ class _SendParcelScreenState extends State<SendParcelScreen> {
                   foregroundColor: Colors.white,
                   elevation: 0,
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                  textStyle: const TextStyle(fontFamily: 'Syne', fontSize: 15, fontWeight: FontWeight.w700),
+                  textStyle: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
                 ),
                 child: Text(success ? 'Continue →' : 'Try Again'),
               ),
@@ -1070,7 +1069,7 @@ class _SendParcelScreenState extends State<SendParcelScreen> {
                     ),
                     const SizedBox(height: 14),
                     const Text('Generating\nlabel...', textAlign: TextAlign.center,
-                        style: TextStyle(fontFamily: 'Syne', fontSize: 13,
+                        style: TextStyle( fontSize: 13,
                             fontWeight: FontWeight.w700, color: Color(0xFF1A1A1A))),
                   ]),
                 ),
@@ -1170,7 +1169,7 @@ class _SendParcelScreenState extends State<SendParcelScreen> {
     final profile = context.watch<ProfileProvider>();
     final isProfileComplete = _profileCanPrefill;
     return Form(key: _s1Key, child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      const Text('Step 1: Sender Details', style: TextStyle(fontFamily: 'Syne', fontSize: 18, fontWeight: FontWeight.w800, color: Color(0xFF1A1A1A))),
+      const Text('Step 1: Sender Details', style: TextStyle( fontSize: 18, fontWeight: FontWeight.w800, color: Color(0xFF1A1A1A))),
       const SizedBox(height: 4),
       const Text('Your contact information', style: TextStyle(fontSize: 13, color: Color(0xFF9B9B9B))),
       const SizedBox(height: 16),
@@ -1197,7 +1196,7 @@ class _SendParcelScreenState extends State<SendParcelScreen> {
                   decoration: BoxDecoration(shape: BoxShape.circle, color: const Color(0xFFFF5A00).withOpacity(0.1),
                       border: Border.all(color: const Color(0xFFFF5A00).withOpacity(0.3)),
                       image: profile.hasAvatar ? DecorationImage(image: NetworkImage(profile.avatarUrl), fit: BoxFit.cover) : null),
-                  child: !profile.hasAvatar ? Center(child: Text(profile.initials, style: const TextStyle(fontFamily: 'Syne', fontSize: 12, fontWeight: FontWeight.w700, color: Color(0xFFFF5A00)))) : null),
+                  child: !profile.hasAvatar ? Center(child: Text(profile.initials, style: const TextStyle( fontSize: 12, fontWeight: FontWeight.w700, color: Color(0xFFFF5A00)))) : null),
               const SizedBox(width: 10),
               Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                 Text(_useProfileData ? 'Using your saved details' : 'Use my saved profile details',
@@ -1444,7 +1443,7 @@ class _SendParcelScreenState extends State<SendParcelScreen> {
 
   // ── STEP 3 ────────────────────────────────────────────────────
   Widget _buildStep3(ParcelProvider p) => Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-    const Text('Step 3: Parcel Details', style: TextStyle(fontFamily: 'Syne', fontSize: 18, fontWeight: FontWeight.w800, color: Color(0xFF1A1A1A))),
+    const Text('Step 3: Parcel Details', style: TextStyle( fontSize: 18, fontWeight: FontWeight.w800, color: Color(0xFF1A1A1A))),
     const SizedBox(height: 20),
     const Text('Parcel Size Guide', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: Color(0xFF3A3A3A))),
     const SizedBox(height: 10),
@@ -1546,7 +1545,7 @@ class _SendParcelScreenState extends State<SendParcelScreen> {
 
   // ── STEP 4 ────────────────────────────────────────────────────
   Widget _buildStep4(ParcelProvider p) => Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-    const Text('Step 4: Choose Courier', style: TextStyle(fontFamily: 'Syne', fontSize: 18, fontWeight: FontWeight.w800, color: Color(0xFF1A1A1A))),
+    const Text('Step 4: Choose Courier', style: TextStyle( fontSize: 18, fontWeight: FontWeight.w800, color: Color(0xFF1A1A1A))),
     const SizedBox(height: 4),
     const Text('Live prices from ShipEngine', style: TextStyle(fontSize: 13, color: Color(0xFF9B9B9B))),
     const SizedBox(height: 20),
@@ -1602,7 +1601,7 @@ class _SendParcelScreenState extends State<SendParcelScreen> {
     final rate = p.selectedRate;
     if (rate == null) return const SizedBox();
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      const Text('Order Summary', style: TextStyle(fontFamily: 'Syne', fontSize: 18, fontWeight: FontWeight.w800, color: Color(0xFF1A1A1A))),
+      const Text('Order Summary', style: TextStyle( fontSize: 18, fontWeight: FontWeight.w800, color: Color(0xFF1A1A1A))),
       const SizedBox(height: 16),
       Container(width: double.infinity, padding: const EdgeInsets.all(14),
           decoration: BoxDecoration(color: const Color(0xFFFFFBE6), border: Border.all(color: const Color(0xFFF5C400)), borderRadius: BorderRadius.circular(12)),
@@ -1619,7 +1618,7 @@ class _SendParcelScreenState extends State<SendParcelScreen> {
       Container(padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(color: Colors.white, border: Border.all(color: const Color(0xFFEEEEEE)), borderRadius: BorderRadius.circular(12)),
           child: Column(children: [
-            const Text('Price Breakdown', style: TextStyle(fontFamily: 'Syne', fontSize: 14, fontWeight: FontWeight.w700, color: Color(0xFF1A1A1A))),
+            const Text('Price Breakdown', style: TextStyle( fontSize: 14, fontWeight: FontWeight.w700, color: Color(0xFF1A1A1A))),
             const SizedBox(height: 12),
             _PriceRow(label: 'Shipping Label (${rate.carrier})', value: '£${rate.price.toStringAsFixed(2)}'),
             _PriceRow(
@@ -1629,8 +1628,8 @@ class _SendParcelScreenState extends State<SendParcelScreen> {
             _PriceRow(label: 'Parcel Size', value: p.selectedSize?.name ?? '—'),
             const Divider(height: 20),
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-              const Text('Total', style: TextStyle(fontFamily: 'Syne', fontSize: 15, fontWeight: FontWeight.w800, color: Color(0xFF1A1A1A))),
-              Text('£${p.totalCost.toStringAsFixed(2)}', style: const TextStyle(fontFamily: 'Syne', fontSize: 15, fontWeight: FontWeight.w800, color: Color(0xFF1A1A1A))),
+              const Text('Total', style: TextStyle( fontSize: 15, fontWeight: FontWeight.w800, color: Color(0xFF1A1A1A))),
+              Text('£${p.totalCost.toStringAsFixed(2)}', style: const TextStyle( fontSize: 15, fontWeight: FontWeight.w800, color: Color(0xFF1A1A1A))),
             ]),
           ])),
       const SizedBox(height: 12),
@@ -1762,7 +1761,7 @@ class _SendParcelScreenState extends State<SendParcelScreen> {
   //                   Text('Total', style: TextStyle(fontSize: 11, letterSpacing: 0.5, color: Colors.white.withOpacity(0.55))),
   //                   const SizedBox(height: 2),
   //                   Text('£${p.totalCost.toStringAsFixed(2)}',
-  //                       style: const TextStyle(fontFamily: 'Syne', fontSize: 20, fontWeight: FontWeight.w700, color: Colors.white)),
+  //                       style: const TextStyle( fontSize: 20, fontWeight: FontWeight.w700, color: Colors.white)),
   //                 ])),
   //               ]),
   //             ),
@@ -1784,7 +1783,7 @@ class _SendParcelScreenState extends State<SendParcelScreen> {
   //                     child: const Icon(Icons.lock_rounded, color: Color(0xFF059669), size: 19)),
   //                 const SizedBox(width: 12),
   //                 const Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-  //                   Text('Card Details', style: TextStyle(fontFamily: 'Syne', fontSize: 15, fontWeight: FontWeight.w800, color: Color(0xFF1A1A1A))),
+  //                   Text('Card Details', style: TextStyle( fontSize: 15, fontWeight: FontWeight.w800, color: Color(0xFF1A1A1A))),
   //                   Text('256-bit SSL · Powered by Stripe', style: TextStyle(fontSize: 11, color: Color(0xFF059669))),
   //                 ])),
   //                 Row(children: [_CardBadge('VISA', const Color(0xFF1A1F71)), const SizedBox(width: 4), _CardBadge('MC', const Color(0xFFEB001B)), const SizedBox(width: 4), _CardBadge('AMEX', const Color(0xFF007BC1))]),
@@ -1839,7 +1838,7 @@ class _SendParcelScreenState extends State<SendParcelScreen> {
   //                   const Padding(padding: EdgeInsets.symmetric(vertical: 10), child: Divider(height: 1, color: Color(0xFFBBF7D0))),
   //                   Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
   //                     const Text('Total charged today', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: Color(0xFF1A1A1A))),
-  //                     Text('£${p.totalCost.toStringAsFixed(2)}', style: const TextStyle(fontFamily: 'Syne', fontSize: 16, fontWeight: FontWeight.w800, color: Color(0xFF059669))),
+  //                     Text('£${p.totalCost.toStringAsFixed(2)}', style: const TextStyle( fontSize: 16, fontWeight: FontWeight.w800, color: Color(0xFF059669))),
   //                   ]),
   //                 ])),
   //             const SizedBox(height: 14),
@@ -1874,7 +1873,7 @@ class _SendParcelScreenState extends State<SendParcelScreen> {
   //               disabledBackgroundColor: const Color(0xFF059669).withOpacity(0.6),
   //               elevation: 0,
   //               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-  //               textStyle: const TextStyle(fontFamily: 'Syne', fontSize: 17, fontWeight: FontWeight.w800)),
+  //               textStyle: const TextStyle( fontSize: 17, fontWeight: FontWeight.w800)),
   //           child: _paymentLoading
   //               ? const Row(mainAxisAlignment: MainAxisAlignment.center, children: [
   //             SizedBox(width: 20, height: 20, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2.5)),
@@ -1972,7 +1971,7 @@ class _SendParcelScreenState extends State<SendParcelScreen> {
                         color: Colors.white.withOpacity(0.55))),
                     const SizedBox(height: 2),
                     Text('£${p.totalCost.toStringAsFixed(2)}',
-                        style: const TextStyle(fontFamily: 'Syne', fontSize: 20,
+                        style: const TextStyle( fontSize: 20,
                             fontWeight: FontWeight.w700, color: Colors.white)),
                   ])),
                 ]),
@@ -2039,7 +2038,7 @@ class _SendParcelScreenState extends State<SendParcelScreen> {
             elevation: 0,
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
             textStyle: const TextStyle(
-                fontFamily: 'Syne', fontSize: 17, fontWeight: FontWeight.w800),
+                 fontSize: 17, fontWeight: FontWeight.w800),
           ),
           child: _paymentLoading
               ? const Row(mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -2074,7 +2073,7 @@ class _SendParcelScreenState extends State<SendParcelScreen> {
       Container(width: 80, height: 80, decoration: BoxDecoration(color: const Color(0xFF059669).withOpacity(0.1), shape: BoxShape.circle),
           child: const Icon(Icons.check_circle_outline_rounded, color: Color(0xFF059669), size: 44)),
       const SizedBox(height: 16),
-      const Text('Parcel Booked!', style: TextStyle(fontFamily: 'Syne', fontSize: 24, fontWeight: FontWeight.w800, color: Color(0xFF1A1A1A))),
+      const Text('Parcel Booked!', style: TextStyle( fontSize: 24, fontWeight: FontWeight.w800, color: Color(0xFF1A1A1A))),
       const SizedBox(height: 6),
       const Text('Your label has been emailed to you.\nPrint it and attach to your parcel.', textAlign: TextAlign.center,
           style: TextStyle(fontSize: 14, color: Color(0xFF6B6B6B), height: 1.6)),
@@ -2098,7 +2097,7 @@ class _SendParcelScreenState extends State<SendParcelScreen> {
             const SizedBox(height: 20), const Divider(), const SizedBox(height: 16),
             if (hasLabel) ...[
               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                const Text('Scan  Digital Label', style: TextStyle(fontFamily: 'Syne', fontSize: 13, fontWeight: FontWeight.w700, color: Color(0xFF1A1A1A))),
+                const Text('Scan  Digital Label', style: TextStyle( fontSize: 13, fontWeight: FontWeight.w700, color: Color(0xFF1A1A1A))),
                 GestureDetector(onTap: () => _showFullscreenQR(p.lastLabelUrl),
                     child: Container(padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                         decoration: BoxDecoration(color: const Color(0xFF6D28D9).withOpacity(0.08), borderRadius: BorderRadius.circular(20)),
@@ -2149,7 +2148,7 @@ class _SendParcelScreenState extends State<SendParcelScreen> {
               },  icon: const Icon(Icons.download_rounded, size: 18, color: Colors.white),
               label: const Text('Download Label PDF'),
               style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF6D28D9), foregroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)), textStyle: const TextStyle(fontFamily: 'Syne', fontSize: 15, fontWeight: FontWeight.w700)))),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)), textStyle: const TextStyle( fontSize: 15, fontWeight: FontWeight.w700)))),
       const SizedBox(height: 10),
       SizedBox(width: double.infinity, height: 48,
           child: OutlinedButton.icon(onPressed: () { p.reset(); Navigator.pop(context); },
@@ -2283,7 +2282,7 @@ class _SendParcelScreenState extends State<SendParcelScreen> {
             child: ElevatedButton(
               onPressed: isLoading ? null : _nextStep,
               style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF6D28D9), foregroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)), textStyle: const TextStyle(fontFamily: 'Syne', fontSize: 15, fontWeight: FontWeight.w700)),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)), textStyle: const TextStyle( fontSize: 15, fontWeight: FontWeight.w700)),
               child: isLoading ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2)) : Text(btnLabel),
             ))),
       ]),

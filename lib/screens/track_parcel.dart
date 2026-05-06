@@ -91,8 +91,8 @@ class _TrackParcelScreenState extends State<TrackParcelScreen> {
           padding: const EdgeInsets.all(20),
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             const SizedBox(height: 8),
-            const Text('Track a Parcel', style: TextStyle(fontFamily: 'Syne',
-                fontSize: 24, fontWeight: FontWeight.w800, color: Color(0xFF1A1A1A))),
+            const Text('Track a Parcel', style: TextStyle(
+                fontSize: 28, fontWeight: FontWeight.w800, color: Color(0xFF1A1A1A))),
             const SizedBox(height: 4),
             const Text('Enter your tracking number for real-time updates',
                 style: TextStyle(fontSize: 13, color: Color(0xFF9B9B9B))),
@@ -292,8 +292,8 @@ class _StatusBanner extends StatelessWidget {
         Icon(cfg['icon'] as IconData, color: cfg['color'] as Color, size: 30),
         const SizedBox(width: 14),
         Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text(cfg['label'] as String, style: TextStyle(fontFamily: 'Syne',
-              fontSize: 18, fontWeight: FontWeight.w800,
+          Text(cfg['label'] as String, style: TextStyle(
+              fontSize: 22, fontWeight: FontWeight.w800,
               color: cfg['color'] as Color)),
           Text('Last updated: just now', style: TextStyle(fontSize: 12,
               color: (cfg['color'] as Color).withOpacity(0.7))),
@@ -336,8 +336,8 @@ class _ParcelInfoCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(14)),
     child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-        const Text('Parcel Details', style: TextStyle(fontFamily: 'Syne',
-            fontSize: 14, fontWeight: FontWeight.w700, color: Color(0xFF1A1A1A))),
+        const Text('Parcel Details', style: TextStyle(
+            fontSize: 20, fontWeight: FontWeight.w700, color: Color(0xFF1A1A1A))),
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
           decoration: BoxDecoration(color: result.courierColor.withOpacity(0.08),
@@ -387,8 +387,8 @@ class _TrackingTimeline extends StatelessWidget {
         border: Border.all(color: const Color(0xFFEEEEEE)),
         borderRadius: BorderRadius.circular(14)),
     child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      const Text('Tracking History', style: TextStyle(fontFamily: 'Syne',
-          fontSize: 14, fontWeight: FontWeight.w700, color: Color(0xFF1A1A1A))),
+      const Text('Tracking History', style: TextStyle(
+          fontSize: 22, fontWeight: FontWeight.w700, color: Color(0xFF1A1A1A))),
       const SizedBox(height: 16),
       ...List.generate(events.length, (i) {
         final e       = events[i];
@@ -458,8 +458,8 @@ class _ActionButtons extends StatelessWidget {
           foregroundColor: Colors.white,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
           padding: const EdgeInsets.symmetric(vertical: 12),
-          textStyle: const TextStyle(fontFamily: 'Syne',
-              fontSize: 14, fontWeight: FontWeight.w700)),
+          textStyle: const TextStyle(
+              fontSize: 20, fontWeight: FontWeight.w700)),
     )),
   ]);
 }

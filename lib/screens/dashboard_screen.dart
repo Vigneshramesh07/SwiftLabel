@@ -271,7 +271,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     fontWeight: FontWeight.w500)),
             const SizedBox(height: 4),
             const Text('What are you shipping today?',
-                style: TextStyle(fontFamily: 'Syne', fontSize: 22,
+                style: TextStyle(fontSize: 28,
                     fontWeight: FontWeight.w800, color: Color(0xFF1A1A1A))),
             const SizedBox(height: 10),
             const MarqueeBanner(),
@@ -379,8 +379,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 child: Column(children: [
                   const Icon(Icons.inventory_2_outlined, size: 40, color: Color(0xFFE0E0E0)),
                   const SizedBox(height: 10),
-                  const Text('No shipments yet', style: TextStyle(fontFamily: 'Syne',
-                      fontSize: 14, fontWeight: FontWeight.w700, color: Color(0xFF9B9B9B))),
+                  const Text('No shipments yet', style: TextStyle(
+                      fontSize: 20, fontWeight: FontWeight.w700, color: Color(0xFF9B9B9B))),
                   const SizedBox(height: 4),
                   const Text('Send your first parcel to see it here',
                       style: TextStyle(fontSize: 12, color: Color(0xFFB0B0B0))),
@@ -477,7 +477,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 fontWeight: FontWeight.w600, letterSpacing: 1.2, color: Colors.white70)),
             const SizedBox(height: 10),
             const Text('Ship anything, anywhere in the UK',
-                style: TextStyle(fontFamily: 'Syne', fontSize: 18,
+                style: TextStyle( fontSize: 18,
                     fontWeight: FontWeight.w800, color: Colors.white)),
             const SizedBox(height: 4),
             const Text('Compare live rates from Royal Mail, Evri, DPD & more',
@@ -522,7 +522,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ),
           ]),
           const SizedBox(height: 10),
-          Text('To ${latest.recipientName}', style: const TextStyle(fontFamily: 'Syne',
+          Text('To ${latest.recipientName}', style: const TextStyle(
               fontSize: 18, fontWeight: FontWeight.w800, color: Colors.white)),
           const SizedBox(height: 4),
           Text('${latest.carrier} · ${latest.service} · ${latest.recipientCity}',
@@ -1053,7 +1053,7 @@ class _DashboardNav extends StatelessWidget {
           ),
           child: avatarUrl.isEmpty
               ? Center(child: Text(initials, style: const TextStyle(
-            fontFamily: 'Syne', fontSize: 13,
+             fontSize: 13,
             fontWeight: FontWeight.w700, color: Color(0xFFFF5A00),
           )))
               : null,
@@ -1113,7 +1113,7 @@ class _SectionTitle extends StatelessWidget {
   const _SectionTitle({required this.title});
   @override
   Widget build(BuildContext context) => Text(title,
-      style: const TextStyle(fontFamily: 'Syne', fontSize: 16,
+      style: const TextStyle( fontSize: 16,
           fontWeight: FontWeight.w800, color: Color(0xFF1A1A1A)));
 }
 
@@ -1149,7 +1149,7 @@ class _ActionCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(10)),
             child: Icon(icon, color: color, size: 20)),
         const SizedBox(height: 12),
-        Text(label, style: const TextStyle(fontFamily: 'Syne', fontSize: 14,
+        Text(label, style: const TextStyle( fontSize: 14,
             fontWeight: FontWeight.w700, color: Color(0xFF1A1A1A))),
         const SizedBox(height: 2),
         Text(subtitle, style: const TextStyle(fontSize: 11, color: Color(0xFF9B9B9B))),
@@ -1176,7 +1176,7 @@ class _ActionCardWide extends StatelessWidget {
             child: Icon(icon, color: color, size: 20)),
         const SizedBox(width: 14),
         Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text(label, style: const TextStyle(fontFamily: 'Syne', fontSize: 14,
+          Text(label, style: const TextStyle( fontSize: 14,
               fontWeight: FontWeight.w700, color: Color(0xFF1A1A1A))),
           const SizedBox(height: 2),
           Text(subtitle, style: const TextStyle(fontSize: 12, color: Color(0xFF9B9B9B))),

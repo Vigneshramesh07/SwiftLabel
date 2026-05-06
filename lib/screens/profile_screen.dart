@@ -619,7 +619,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
             const SizedBox(height: 20),
             const Text('Update Profile Photo',
-                style: TextStyle(fontFamily: 'Syne', fontSize: 16,
+                style: TextStyle( fontSize: 16,
                     fontWeight: FontWeight.w800, color: Color(0xFF1A1A1A))),
             const SizedBox(height: 20),
             _PickerOption(
@@ -722,7 +722,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         backgroundColor: Colors.white,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         title: const Text('Log Out',
-            style: TextStyle(fontFamily: 'Syne',
+            style: TextStyle(
                 fontWeight: FontWeight.w800, color: Color(0xFF1A1A1A))),
         content: const Text('Are you sure you want to log out of SwiftLabel?',
             style: TextStyle(color: Color(0xFF6B6B6B), height: 1.5)),
@@ -822,7 +822,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         const Text('My Profile',
-                            style: TextStyle(fontFamily: 'Syne', fontSize: 22,
+                            style: TextStyle( fontSize: 22,
                                 fontWeight: FontWeight.w800, color: Color(0xFF1A1A1A))),
                         if (!isEditing)
                           _OutlineBtn(
@@ -894,7 +894,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   ? Center(
                                   child: Text(profile.initials,
                                       style: const TextStyle(
-                                          fontFamily: 'Syne',
+                                          
                                           fontSize: 28,
                                           fontWeight: FontWeight.w800,
                                           color: Color(0xFFFF5A00))))
@@ -924,7 +924,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           profile.fullName.isNotEmpty
                               ? profile.fullName : 'Your Name',
                           style: TextStyle(
-                              fontFamily: 'Syne', fontSize: 18,
+                               fontSize: 18,
                               fontWeight: FontWeight.w800,
                               color: profile.fullName.isNotEmpty
                                   ? const Color(0xFF1A1A1A)
@@ -1424,7 +1424,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               child: CircularProgressIndicator(
                                   color: Colors.white, strokeWidth: 2))
                               : const Text('Save Changes',
-                              style: TextStyle(fontFamily: 'Syne',
+                              style: TextStyle(
                                   fontSize: 15,
                                   fontWeight: FontWeight.w700)),
                         ),
@@ -1627,7 +1627,7 @@ class _SectionCard extends StatelessWidget {
     child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       Text(title,
           style: const TextStyle(
-              fontFamily: 'Syne',
+              
               fontSize: 14,
               fontWeight: FontWeight.w700,
               color: Color(0xFF1A1A1A))),

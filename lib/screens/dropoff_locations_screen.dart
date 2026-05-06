@@ -382,7 +382,7 @@ class _DropOffState extends State<DropOffLocationsScreen> {
                 borderRadius: BorderRadius.circular(2)),
           ),
           const Text('Get Directions via', style: TextStyle(
-            fontFamily: 'Syne', fontSize: 15,
+             fontSize: 15,
             fontWeight: FontWeight.w700, color: Color(0xFF1A1A1A),
           )),
           const SizedBox(height: 16),
@@ -481,7 +481,7 @@ class _DropOffState extends State<DropOffLocationsScreen> {
             const Expanded(child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start, children: [
               Text('Drop Off Locations', style: TextStyle(
-                  fontFamily: 'Syne', fontSize: 17,
+                   fontSize: 17,
                   fontWeight: FontWeight.w800, color: Color(0xFF1A1A1A))),
               Text('Find nearby parcel drop-off points',
                   style: TextStyle(fontSize: 11, color: Color(0xFF9B9B9B))),
@@ -676,7 +676,7 @@ class _DropOffState extends State<DropOffLocationsScreen> {
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12)),
                       textStyle: const TextStyle(
-                          fontFamily: 'Syne', fontSize: 15,
+                           fontSize: 15,
                           fontWeight: FontWeight.w700),
                     ),
                     child: _loading
@@ -907,7 +907,7 @@ class _DropOffState extends State<DropOffLocationsScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Row(children: [
                   const Text('Nearby Locations', style: TextStyle(
-                      fontFamily: 'Syne', fontSize: 14,
+                       fontSize: 14,
                       fontWeight: FontWeight.w700, color: Color(0xFF1A1A1A))),
                   const Spacer(),
                   Text('${_points.length} found',
@@ -951,7 +951,7 @@ class _DropOffState extends State<DropOffLocationsScreen> {
                             size: 40, color: Color(0xFF059669))),
                     const SizedBox(height: 18),
                     const Text('Find Drop-Off Points', style: TextStyle(
-                        fontFamily: 'Syne', fontSize: 16,
+                         fontSize: 16,
                         fontWeight: FontWeight.w700, color: Color(0xFF1A1A1A))),
                     const SizedBox(height: 8),
                     const Text(
@@ -999,7 +999,7 @@ class _DropOffState extends State<DropOffLocationsScreen> {
             const SizedBox(width: 12),
             Expanded(child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text(p.name, style: const TextStyle(fontFamily: 'Syne',
+              Text(p.name, style: const TextStyle(
                   fontSize: 15, fontWeight: FontWeight.w800,
                   color: Color(0xFF1A1A1A))),
               Text(p.carrier, style: TextStyle(fontSize: 12,
@@ -1053,7 +1053,7 @@ class _DropOffState extends State<DropOffLocationsScreen> {
                     borderRadius: BorderRadius.circular(10)),
                 padding: const EdgeInsets.symmetric(vertical: 12),
                 textStyle: const TextStyle(
-                    fontFamily: 'Syne', fontWeight: FontWeight.w700),
+                     fontWeight: FontWeight.w700),
               ),
             )),
           ]),

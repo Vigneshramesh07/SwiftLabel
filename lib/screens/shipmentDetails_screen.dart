@@ -89,7 +89,7 @@ class _ShipmentDetailScreenState extends State<ShipmentDetailScreen> {
           padding: const EdgeInsets.all(24),
           child: Column(mainAxisSize: MainAxisSize.min, children: [
             const Text('Scan to Open Label', style: TextStyle(
-                fontFamily: 'Syne', fontSize: 16,
+                fontSize: 20,
                 fontWeight: FontWeight.w800, color: Color(0xFF1A1A1A))),
             const SizedBox(height: 6),
             const Text('Point your phone camera at this QR code',
@@ -114,7 +114,7 @@ class _ShipmentDetailScreenState extends State<ShipmentDetailScreen> {
               ),
               const SizedBox(width: 8),
               const Text('SwiftLabel', style: TextStyle(
-                  fontFamily: 'Syne', fontSize: 16,
+                   fontSize: 16,
                   fontWeight: FontWeight.w800, color: Color(0xFF1A1A1A))),
             ]),
             const SizedBox(height: 10),
@@ -203,7 +203,7 @@ class _ShipmentDetailScreenState extends State<ShipmentDetailScreen> {
                     borderRadius: BorderRadius.circular(8)),
                 child: const Icon(Icons.inventory_2_outlined, color: Colors.white, size: 16)),
             const SizedBox(width: 8),
-            const Text('SwiftLabel', style: TextStyle(fontFamily: 'Syne',
+            const Text('SwiftLabel', style: TextStyle(
                 fontSize: 17, fontWeight: FontWeight.w800, color: Color(0xFF1A1A1A))),
             const Spacer(),
             GestureDetector(
@@ -222,8 +222,8 @@ class _ShipmentDetailScreenState extends State<ShipmentDetailScreen> {
             const SizedBox(height: 4),
 
             // Title + status
-            const Text('Shipment Details', style: TextStyle(fontFamily: 'Syne',
-                fontSize: 22, fontWeight: FontWeight.w800, color: Color(0xFF1A1A1A))),
+            const Text('Shipment Details', style: TextStyle(
+                fontSize: 26, fontWeight: FontWeight.w800, color: Color(0xFF1A1A1A))),
             const SizedBox(height: 10),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
@@ -250,8 +250,8 @@ class _ShipmentDetailScreenState extends State<ShipmentDetailScreen> {
               ),
               child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                 Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                  Text(s.carrier, style: const TextStyle(fontFamily: 'Syne',
-                      fontSize: 16, fontWeight: FontWeight.w800, color: Colors.white)),
+                  Text(s.carrier, style: const TextStyle(
+                      fontSize: 20, fontWeight: FontWeight.w800, color: Colors.white)),
 
                 ]),
                 const SizedBox(height: 10),
@@ -355,7 +355,7 @@ class _ShipmentDetailScreenState extends State<ShipmentDetailScreen> {
                   border: Border.all(color: const Color(0xFFEEEEEE)),
                   borderRadius: BorderRadius.circular(14)),
               child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                const Text('Parcel & Pricing', style: TextStyle(fontFamily: 'Syne',
+                const Text('Parcel & Pricing', style: TextStyle(
                     fontSize: 14, fontWeight: FontWeight.w700, color: Color(0xFF1A1A1A))),
                 const SizedBox(height: 12),
                 _Row('Size',    s.parcelSize.isEmpty ? '—' : s.parcelSize),
@@ -364,11 +364,11 @@ class _ShipmentDetailScreenState extends State<ShipmentDetailScreen> {
                 _Row('Service', s.service),
                 const Divider(height: 20),
                 Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                  const Text('Total Paid', style: TextStyle(fontFamily: 'Syne',
+                  const Text('Total Paid', style: TextStyle(
                       fontSize: 14, fontWeight: FontWeight.w700,
                       color: Color(0xFF1A1A1A))),
                   Text('£${s.price.toStringAsFixed(2)}', style: const TextStyle(
-                      fontFamily: 'Syne', fontSize: 16, fontWeight: FontWeight.w800,
+                       fontSize: 16, fontWeight: FontWeight.w800,
                       color: Color(0xFF6D28D9))),
                 ]),
               ]),
@@ -388,7 +388,7 @@ class _ShipmentDetailScreenState extends State<ShipmentDetailScreen> {
                   Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         const Text('Scan Digital Label', style: TextStyle(
-                            fontFamily: 'Syne', fontSize: 14,
+                             fontSize: 14,
                             fontWeight: FontWeight.w700, color: Color(0xFF1A1A1A))),
                         GestureDetector(
                           onTap: _showFullscreenQR,
@@ -434,7 +434,7 @@ class _ShipmentDetailScreenState extends State<ShipmentDetailScreen> {
                     ),
                     const SizedBox(width: 8),
                     const Text('SwiftLabel', style: TextStyle(
-                        fontFamily: 'Syne', fontSize: 16,
+                         fontSize: 16,
                         fontWeight: FontWeight.w800, color: Color(0xFF1A1A1A))),
                   ]),
 
@@ -489,7 +489,7 @@ class _ShipmentDetailScreenState extends State<ShipmentDetailScreen> {
                           foregroundColor: Colors.white,
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10)),
-                          textStyle: const TextStyle(fontFamily: 'Syne',
+                          textStyle: const TextStyle(
                               fontSize: 14, fontWeight: FontWeight.w700),
                         ),
                       )),

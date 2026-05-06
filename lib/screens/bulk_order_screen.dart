@@ -484,7 +484,7 @@ class _BulkOrderScreenState extends State<BulkOrderScreen> {
                   child: const Icon(Icons.checklist_rounded,
                       color: Color(0xFFFF5A00), size: 30)),
               const SizedBox(height: 16),
-              const Text('Are you sure?', style: TextStyle(fontFamily: 'Syne',
+              const Text('Are you sure?', style: TextStyle(
                   fontSize: 20, fontWeight: FontWeight.w800, color: Color(0xFF1A1A1A))),
               const SizedBox(height: 6),
               const Text('Review your data before proceeding',
@@ -552,7 +552,7 @@ class _BulkOrderScreenState extends State<BulkOrderScreen> {
                           borderRadius: BorderRadius.circular(10)),
                       padding: const EdgeInsets.symmetric(vertical: 12),
                       textStyle: const TextStyle(
-                          fontFamily: 'Syne', fontWeight: FontWeight.w700)),
+                           fontWeight: FontWeight.w700)),
                   child: Text('Proceed ($valid rows)'),
                 )),
               ]),
@@ -1047,7 +1047,7 @@ class _BulkOrderScreenState extends State<BulkOrderScreen> {
                     color: success ? const Color(0xFF059669) : Colors.red)),
             const SizedBox(height: 20),
             Text(success ? 'Payment Successful!' : 'Payment Failed',
-                style: TextStyle(fontFamily: 'Syne', fontSize: 22,
+                style: TextStyle( fontSize: 22,
                     fontWeight: FontWeight.w800,
                     color: success ? const Color(0xFF059669) : Colors.red),
                 textAlign: TextAlign.center),
@@ -1066,7 +1066,7 @@ class _BulkOrderScreenState extends State<BulkOrderScreen> {
                         foregroundColor: Colors.white, elevation: 0,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12)),
-                        textStyle: const TextStyle(fontFamily: 'Syne',
+                        textStyle: const TextStyle(
                             fontSize: 15, fontWeight: FontWeight.w700)),
                     child: Text(success ? 'Continue →' : 'Try Again'))),
           ]),
@@ -1454,7 +1454,7 @@ class _BulkOrderScreenState extends State<BulkOrderScreen> {
                             color: Color(0xFFFF5A00), strokeWidth: 3.5)),
                     const SizedBox(height: 14),
                     const Text('Generating\nlabels...', textAlign: TextAlign.center,
-                        style: TextStyle(fontFamily: 'Syne', fontSize: 14,
+                        style: TextStyle( fontSize: 14,
                             fontWeight: FontWeight.w700, color: Color(0xFF1A1A1A))),
                     const SizedBox(height: 6),
                     Text(
@@ -1780,7 +1780,7 @@ class _BulkOrderScreenState extends State<BulkOrderScreen> {
                   border: Border.all(color: const Color(0xFFFF5A00).withOpacity(0.3), width: 2),
                   borderRadius: BorderRadius.circular(24)),
               child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-                Text('$_recipientCount', style: const TextStyle(fontFamily: 'Syne',
+                Text('$_recipientCount', style: const TextStyle(
                     fontSize: 48, fontWeight: FontWeight.w800, color: Color(0xFFFF5A00))),
                 const Text('recipients', style: TextStyle(fontSize: 12, color: Color(0xFF9B9B9B))),
               ])),
@@ -1969,7 +1969,7 @@ class _BulkOrderScreenState extends State<BulkOrderScreen> {
                   style: const TextStyle(fontSize: 11, color: Color(0xFF9B9B9B))),
               ]),
               Text('£${_totalSelected.toStringAsFixed(2)}',
-                  style: const TextStyle(fontFamily: 'Syne', fontSize: 24, fontWeight: FontWeight.w800, color: Color(0xFFFF5A00))),
+                  style: const TextStyle( fontSize: 24, fontWeight: FontWeight.w800, color: Color(0xFFFF5A00))),
             ])),
       ],
     ]);
@@ -2051,7 +2051,7 @@ class _BulkOrderScreenState extends State<BulkOrderScreen> {
   //                     Text('Total', style: TextStyle(fontSize: 11, color: Colors.white.withOpacity(0.55))),
   //                     const SizedBox(height: 2),
   //                     Text('£${_totalSelected.toStringAsFixed(2)}',
-  //                         style: const TextStyle(fontFamily: 'Syne', fontSize: 20, fontWeight: FontWeight.w700, color: Colors.white)),
+  //                         style: const TextStyle( fontSize: 20, fontWeight: FontWeight.w700, color: Colors.white)),
   //                   ])),
   //                 ]),
   //               ),
@@ -2076,7 +2076,7 @@ class _BulkOrderScreenState extends State<BulkOrderScreen> {
   //                   child: const Icon(Icons.lock_rounded, color: Color(0xFF059669), size: 19)),
   //               const SizedBox(width: 12),
   //               const Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-  //                 Text('Card Details', style: TextStyle(fontFamily: 'Syne', fontSize: 15, fontWeight: FontWeight.w800, color: Color(0xFF1A1A1A))),
+  //                 Text('Card Details', style: TextStyle( fontSize: 15, fontWeight: FontWeight.w800, color: Color(0xFF1A1A1A))),
   //                 Text('256-bit SSL · Powered by Stripe', style: TextStyle(fontSize: 11, color: Color(0xFF059669))),
   //               ])),
   //               Row(children: [
@@ -2167,7 +2167,7 @@ class _BulkOrderScreenState extends State<BulkOrderScreen> {
   //                       Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
   //                         const Text('Total charged today', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: Color(0xFF1A1A1A))),
   //                         Text('£${_totalSelected.toStringAsFixed(2)}',
-  //                             style: const TextStyle(fontFamily: 'Syne', fontSize: 16, fontWeight: FontWeight.w800, color: Color(0xFF059669))),
+  //                             style: const TextStyle( fontSize: 16, fontWeight: FontWeight.w800, color: Color(0xFF059669))),
   //                       ]),
   //                     ])),
   //                 const SizedBox(height: 14),
@@ -2207,7 +2207,7 @@ class _BulkOrderScreenState extends State<BulkOrderScreen> {
   //                 backgroundColor: const Color(0xFF059669), foregroundColor: Colors.white,
   //                 disabledBackgroundColor: const Color(0xFF059669).withOpacity(0.4),
   //                 elevation: 0, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-  //                 textStyle: const TextStyle(fontFamily: 'Syne', fontSize: 17, fontWeight: FontWeight.w800)),
+  //                 textStyle: const TextStyle( fontSize: 17, fontWeight: FontWeight.w800)),
   //             child: _paymentLoading
   //                 ? const Row(mainAxisAlignment: MainAxisAlignment.center, children: [
   //               SizedBox(width: 20, height: 20, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2.5)),
@@ -2314,7 +2314,7 @@ class _BulkOrderScreenState extends State<BulkOrderScreen> {
                               color: Colors.white.withOpacity(0.55))),
                           const SizedBox(height: 2),
                           Text('£${_totalSelected.toStringAsFixed(2)}',
-                              style: const TextStyle(fontFamily: 'Syne',
+                              style: const TextStyle(
                                   fontSize: 20, fontWeight: FontWeight.w700,
                                   color: Colors.white)),
                         ])),
@@ -2393,7 +2393,7 @@ class _BulkOrderScreenState extends State<BulkOrderScreen> {
                 elevation: 0,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16)),
-                textStyle: const TextStyle(fontFamily: 'Syne',
+                textStyle: const TextStyle(
                     fontSize: 17, fontWeight: FontWeight.w800)),
             child: _paymentLoading
                 ? const Row(mainAxisAlignment: MainAxisAlignment.center,
@@ -2436,7 +2436,7 @@ class _BulkOrderScreenState extends State<BulkOrderScreen> {
                 child: CircularProgressIndicator(value: pct, strokeWidth: 10,
                     backgroundColor: const Color(0xFFEEEEEE), color: const Color(0xFFFF5A00))),
             Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-              Text('$done', style: const TextStyle(fontFamily: 'Syne', fontSize: 34, fontWeight: FontWeight.w800, color: Color(0xFF1A1A1A))),
+              Text('$done', style: const TextStyle( fontSize: 34, fontWeight: FontWeight.w800, color: Color(0xFF1A1A1A))),
               Text('of ${valid.length}', style: const TextStyle(fontSize: 13, color: Color(0xFF9B9B9B))),
             ]),
           ]))),
@@ -2473,7 +2473,7 @@ class _BulkOrderScreenState extends State<BulkOrderScreen> {
         decoration: BoxDecoration(color: const Color(0xFF059669).withOpacity(0.1), shape: BoxShape.circle),
         child: const Icon(Icons.check_circle_outline_rounded, color: Color(0xFF059669), size: 44)),
     const SizedBox(height: 16),
-    const Text('Batch Complete!', style: TextStyle(fontFamily: 'Syne', fontSize: 24, fontWeight: FontWeight.w800, color: Color(0xFF1A1A1A))),
+    const Text('Batch Complete!', style: TextStyle( fontSize: 24, fontWeight: FontWeight.w800, color: Color(0xFF1A1A1A))),
     const SizedBox(height: 8),
     Text('$_successCount of ${_validRows.length} labels generated',
         style: const TextStyle(fontSize: 14, color: Color(0xFF6B6B6B))),
@@ -2503,7 +2503,7 @@ class _BulkOrderScreenState extends State<BulkOrderScreen> {
             const Row(children: [
               Icon(Icons.picture_as_pdf_rounded, color: Color(0xFFDC2626), size: 16),
               SizedBox(width: 8),
-              Text('Download Labels', style: TextStyle(fontFamily: 'Syne', fontSize: 14, fontWeight: FontWeight.w700, color: Color(0xFF1A1A1A))),
+              Text('Download Labels', style: TextStyle( fontSize: 14, fontWeight: FontWeight.w700, color: Color(0xFF1A1A1A))),
             ]),
             const SizedBox(height: 12),
             ..._validRows.where((r) => r.status == 'success' && r.labelUrl.isNotEmpty)
@@ -2537,7 +2537,7 @@ class _BulkOrderScreenState extends State<BulkOrderScreen> {
           style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0xFFFF5A00), foregroundColor: Colors.white,
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-              textStyle: const TextStyle(fontFamily: 'Syne', fontSize: 15, fontWeight: FontWeight.w700)),
+              textStyle: const TextStyle( fontSize: 15, fontWeight: FontWeight.w700)),
         )),
   ]);
 
@@ -2585,7 +2585,7 @@ class _BulkOrderScreenState extends State<BulkOrderScreen> {
                   backgroundColor: const Color(0xFFFF5A00), foregroundColor: Colors.white,
                   disabledBackgroundColor: const Color(0xFFFFDDCC),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                  textStyle: const TextStyle(fontFamily: 'Syne', fontSize: 14, fontWeight: FontWeight.w700)),
+                  textStyle: const TextStyle( fontSize: 14, fontWeight: FontWeight.w700)),
               child: _loadingAllRates
                   ? const SizedBox(width: 18, height: 18, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
                   : Text(label),
@@ -2684,7 +2684,7 @@ class _BulkOrderScreenState extends State<BulkOrderScreen> {
   }
 
   Widget _header(String t, String s) => Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-    Text(t, style: const TextStyle(fontFamily: 'Syne', fontSize: 20, fontWeight: FontWeight.w800, color: Color(0xFF1A1A1A))),
+    Text(t, style: const TextStyle( fontSize: 20, fontWeight: FontWeight.w800, color: Color(0xFF1A1A1A))),
     const SizedBox(height: 4),
     Text(s, style: const TextStyle(fontSize: 13, color: Color(0xFF9B9B9B))),
   ]);
@@ -2874,7 +2874,7 @@ class _CourierCard extends StatelessWidget {
             ])),
             if (row.selectedRate != null)
                 Text('£${(row.selectedRate!.price + ServiceFee.domestic(row.parcelSize)).toStringAsFixed(2)}',
-                  style: const TextStyle(fontFamily: 'Syne', fontSize: 14, fontWeight: FontWeight.w800, color: Color(0xFFFF5A00))),
+                  style: const TextStyle( fontSize: 14, fontWeight: FontWeight.w800, color: Color(0xFFFF5A00))),
           ])),
       const Divider(height: 1, color: Color(0xFFF5F5F5)),
       Column(
@@ -3167,7 +3167,7 @@ class _ConfirmStat extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 12),
       decoration: BoxDecoration(color: color.withOpacity(0.08), border: Border.all(color: color.withOpacity(0.2)), borderRadius: BorderRadius.circular(10)),
       child: Column(children: [
-        Text(value, style: TextStyle(fontFamily: 'Syne', fontSize: 20, fontWeight: FontWeight.w800, color: color)),
+        Text(value, style: TextStyle( fontSize: 20, fontWeight: FontWeight.w800, color: color)),
         Text(label, style: const TextStyle(fontSize: 10, color: Color(0xFF9B9B9B))),
       ])));
 }
@@ -3258,7 +3258,7 @@ class _StatCard extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 12),
       decoration: BoxDecoration(color: color.withOpacity(0.06), border: Border.all(color: color.withOpacity(0.2)), borderRadius: BorderRadius.circular(10)),
       child: Column(children: [
-        Text(value, style: TextStyle(fontFamily: 'Syne', fontSize: 22, fontWeight: FontWeight.w800, color: color)),
+        Text(value, style: TextStyle( fontSize: 22, fontWeight: FontWeight.w800, color: color)),
         Text(label, style: const TextStyle(fontSize: 11, color: Color(0xFF9B9B9B))),
       ]));
 }
@@ -3269,7 +3269,7 @@ class _SumTile extends StatelessWidget {
   @override Widget build(BuildContext context) => Column(children: [
     Icon(icon, color: color, size: 22),
     const SizedBox(height: 6),
-    Text(value, style: TextStyle(fontFamily: 'Syne', fontSize: 16, fontWeight: FontWeight.w800, color: color)),
+    Text(value, style: TextStyle( fontSize: 16, fontWeight: FontWeight.w800, color: color)),
     Text(label, style: const TextStyle(fontSize: 10, color: Color(0xFF9B9B9B))),
   ]);
 }

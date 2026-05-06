@@ -246,8 +246,8 @@ class _PickupScreenState extends State<PickupScreen> {
                   color: Color(0xFF6D28D9), size: 22)),
           const SizedBox(width: 14),
           Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            const Text('Schedule Pickup', style: TextStyle(fontFamily: 'Syne',
-                fontSize: 20, fontWeight: FontWeight.w800, color: Color(0xFF1A1A1A))),
+            const Text('Schedule Pickup', style: TextStyle(
+                fontSize: 24, fontWeight: FontWeight.w800, color: Color(0xFF1A1A1A))),
             Text('${widget.carrierName} will collect from your address',
                 style: const TextStyle(fontSize: 13, color: Color(0xFF6B6B6B))),
           ])),
@@ -276,8 +276,8 @@ class _PickupScreenState extends State<PickupScreen> {
         const SizedBox(height: 24),
 
         // ── Pickup address ─────────────────────────────────────
-        const Text('Pickup Address', style: TextStyle(fontFamily: 'Syne',
-            fontSize: 15, fontWeight: FontWeight.w700, color: Color(0xFF1A1A1A))),
+        const Text('Pickup Address', style: TextStyle(
+            fontSize: 20, fontWeight: FontWeight.w700, color: Color(0xFF1A1A1A))),
         const SizedBox(height: 10),
         Container(
           padding: const EdgeInsets.all(14),
@@ -307,7 +307,7 @@ class _PickupScreenState extends State<PickupScreen> {
         const SizedBox(height: 24),
 
         // ── Select date ────────────────────────────────────────
-        const Text('Select Pickup Date', style: TextStyle(fontFamily: 'Syne',
+        const Text('Select Pickup Date', style: TextStyle(
             fontSize: 15, fontWeight: FontWeight.w700, color: Color(0xFF1A1A1A))),
         const SizedBox(height: 10),
 
@@ -350,7 +350,7 @@ class _PickupScreenState extends State<PickupScreen> {
                       Text(dayName, style: TextStyle(fontSize: 11,
                           fontWeight: FontWeight.w600,
                           color: sel ? Colors.white70 : const Color(0xFF9B9B9B))),
-                      Text(dayNum, style: TextStyle(fontFamily: 'Syne', fontSize: 18,
+                      Text(dayNum, style: TextStyle( fontSize: 18,
                           fontWeight: FontWeight.w800,
                           color: sel ? Colors.white : const Color(0xFF1A1A1A))),
                       Text(month, style: TextStyle(fontSize: 11,
@@ -379,7 +379,7 @@ class _PickupScreenState extends State<PickupScreen> {
         const SizedBox(height: 24),
 
         // ── Select time window ─────────────────────────────────
-        const Text('Pickup Time Window', style: TextStyle(fontFamily: 'Syne',
+        const Text('Pickup Time Window', style: TextStyle(
             fontSize: 15, fontWeight: FontWeight.w700, color: Color(0xFF1A1A1A))),
         const SizedBox(height: 10),
         Row(children: _windows.map((w) {
@@ -462,7 +462,7 @@ class _PickupScreenState extends State<PickupScreen> {
               foregroundColor: Colors.white,
               disabledBackgroundColor: const Color(0xFF6D28D9).withOpacity(0.4),
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-              textStyle: const TextStyle(fontFamily: 'Syne',
+              textStyle: const TextStyle(
                   fontSize: 16, fontWeight: FontWeight.w700),
             ),
             child: _scheduling
@@ -511,7 +511,7 @@ class _PickupScreenState extends State<PickupScreen> {
                 color: Color(0xFF059669), size: 48)),
 
         const SizedBox(height: 20),
-        const Text('Pickup Scheduled!', style: TextStyle(fontFamily: 'Syne',
+        const Text('Pickup Scheduled!', style: TextStyle(
             fontSize: 24, fontWeight: FontWeight.w800, color: Color(0xFF1A1A1A))),
         const SizedBox(height: 8),
         Text('${widget.carrierName} will collect your parcel',
@@ -604,7 +604,7 @@ class _PickupScreenState extends State<PickupScreen> {
               backgroundColor: const Color(0xFF6D28D9),
               foregroundColor: Colors.white,
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-              textStyle: const TextStyle(fontFamily: 'Syne',
+              textStyle: const TextStyle(
                   fontSize: 15, fontWeight: FontWeight.w700),
             ),
           ),

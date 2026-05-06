@@ -561,7 +561,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
                   decoration: BoxDecoration(color: _kOrange, borderRadius: BorderRadius.circular(6)),
                   child: const Text('ADMIN', style: TextStyle(fontSize: 10, fontWeight: FontWeight.w800, color: Colors.white, letterSpacing: 1))),
               const SizedBox(width: 8),
-              const Text('Dashboard', style: TextStyle(fontFamily: 'Syne', fontSize: 18, fontWeight: FontWeight.w800, color: Color(0xFF1A1A1A))),
+              const Text('Dashboard', style: TextStyle(fontSize: 24, fontWeight: FontWeight.w800, color: Color(0xFF1A1A1A))),
               const Spacer(),
               GestureDetector(onTap: _loadStats,
                   child: const Icon(Icons.refresh_rounded, size: 18, color: _kGrey)),
@@ -601,7 +601,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
               controller: _tabs,
               isScrollable: true,
               tabAlignment: TabAlignment.start,
-              labelStyle: const TextStyle(fontFamily: 'Syne', fontSize: 11, fontWeight: FontWeight.w700),
+              labelStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
               unselectedLabelStyle: const TextStyle(fontSize: 11),
               labelColor: _kOrange,
               unselectedLabelColor: _kGrey,
@@ -759,7 +759,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
                         borderRadius: BorderRadius.circular(10),
                         border: Border.all(color: b.statusColor.withOpacity(0.3))),
                     child: Center(child: Text('${b.totalParcels}',
-                        style: TextStyle(fontFamily: 'Syne', fontSize: 14, fontWeight: FontWeight.w800, color: b.statusColor)))),
+                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800, color: b.statusColor)))),
                 const SizedBox(width: 12),
                 Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                   Text(b.batchName.isNotEmpty ? b.batchName : 'Bulk Order',
@@ -814,7 +814,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
 
         // Revenue summary cards
-        const Text('Revenue Summary', style: TextStyle(fontFamily: 'Syne', fontSize: 14, fontWeight: FontWeight.w700)),
+        const Text('Revenue Summary', style: TextStyle( fontSize: 14, fontWeight: FontWeight.w700)),
         const SizedBox(height: 10),
         Row(children: [
           _ReportCard('Today',      '£${((_stats['today_revenue'] ?? 0.0) as double).toStringAsFixed(2)}', '${_stats['today_parcels'] ?? 0} parcels', _kOrange),
@@ -832,7 +832,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
 
         // Monthly Revenue Chart
         Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-          const Text('Monthly Revenue', style: TextStyle(fontFamily: 'Syne', fontSize: 14, fontWeight: FontWeight.w700)),
+          const Text('Monthly Revenue', style: TextStyle( fontSize: 14, fontWeight: FontWeight.w700)),
           GestureDetector(
             onTap: _exportMonthlyReportCSV,
             child: Container(padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
@@ -877,7 +877,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
         const SizedBox(height: 28),
 
         // Carrier breakdown
-        const Text('Carrier Breakdown', style: TextStyle(fontFamily: 'Syne', fontSize: 14, fontWeight: FontWeight.w700)),
+        const Text('Carrier Breakdown', style: TextStyle( fontSize: 14, fontWeight: FontWeight.w700)),
         const SizedBox(height: 10),
         ...carrierMap.entries.map((e) {
           final pct = totalShipments > 0 ? e.value / totalShipments : 0.0;
@@ -898,7 +898,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen>
         const SizedBox(height: 28),
 
         // Download all
-        const Text('Download Reports', style: TextStyle(fontFamily: 'Syne', fontSize: 14, fontWeight: FontWeight.w700)),
+        const Text('Download Reports', style: TextStyle( fontSize: 14, fontWeight: FontWeight.w700)),
         const SizedBox(height: 10),
         _ExportButton('All Shipments (CSV)',   Icons.local_shipping_rounded, _kOrange,              _exportShipmentsCSV),
         const SizedBox(height: 8),
@@ -941,7 +941,7 @@ class _StatChip extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 7),
       decoration: BoxDecoration(color: color.withOpacity(0.07), border: Border.all(color: color.withOpacity(0.2)), borderRadius: BorderRadius.circular(10)),
       child: Column(children: [
-        Text(value, style: TextStyle(fontFamily: 'Syne', fontSize: 13, fontWeight: FontWeight.w800, color: color), maxLines: 1, overflow: TextOverflow.ellipsis),
+        Text(value, style: TextStyle( fontSize: 13, fontWeight: FontWeight.w800, color: color), maxLines: 1, overflow: TextOverflow.ellipsis),
         Text(label, style: const TextStyle(fontSize: 8, color: _kGrey)),
       ])));
 }
@@ -1000,7 +1000,7 @@ class _ReportCard extends StatelessWidget {
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Text(title, style: const TextStyle(fontSize: 11, color: _kGrey)),
         const SizedBox(height: 4),
-        Text(value, style: TextStyle(fontFamily: 'Syne', fontSize: 18, fontWeight: FontWeight.w800, color: color)),
+        Text(value, style: TextStyle( fontSize: 18, fontWeight: FontWeight.w800, color: color)),
         Text(sub,   style: const TextStyle(fontSize: 10, color: _kGrey)),
       ])));
 }
@@ -1034,7 +1034,7 @@ class _UserRow extends StatelessWidget {
             Container(width: 44, height: 44, decoration: BoxDecoration(shape: BoxShape.circle,
                 color: _kOrange.withOpacity(0.1), border: Border.all(color: _kOrange.withOpacity(0.3)),
                 image: user.avatarUrl.isNotEmpty ? DecorationImage(image: NetworkImage(user.avatarUrl), fit: BoxFit.cover) : null),
-                child: user.avatarUrl.isEmpty ? Center(child: Text(user.initials, style: const TextStyle(fontFamily: 'Syne', fontSize: 14, fontWeight: FontWeight.w700, color: _kOrange))) : null),
+                child: user.avatarUrl.isEmpty ? Center(child: Text(user.initials, style: const TextStyle( fontSize: 14, fontWeight: FontWeight.w700, color: _kOrange))) : null),
             const SizedBox(width: 12),
             Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Text(user.fullName.isNotEmpty ? user.fullName : user.email,
@@ -1200,7 +1200,7 @@ class _UserDetailPageState extends State<_UserDetailPage> with SingleTickerProvi
               GestureDetector(onTap: () => Navigator.pop(context),
                   child: const Icon(Icons.arrow_back_ios, size: 16, color: Color(0xFF6B6B6B))),
               const SizedBox(width: 8),
-              const Text('User Profile', style: TextStyle(fontFamily: 'Syne', fontSize: 18, fontWeight: FontWeight.w800)),
+              const Text('User Profile', style: TextStyle( fontSize: 18, fontWeight: FontWeight.w800)),
               const Spacer(),
               GestureDetector(
                 onTap: () => setState(() { _editing = !_editing; }),
@@ -1223,7 +1223,7 @@ class _UserDetailPageState extends State<_UserDetailPage> with SingleTickerProvi
               Container(width: 56, height: 56, decoration: BoxDecoration(shape: BoxShape.circle,
                   color: _kOrange.withOpacity(0.1), border: Border.all(color: _kOrange.withOpacity(0.3)),
                   image: u.avatarUrl.isNotEmpty ? DecorationImage(image: NetworkImage(u.avatarUrl), fit: BoxFit.cover) : null),
-                  child: u.avatarUrl.isEmpty ? Center(child: Text(u.initials, style: const TextStyle(fontFamily: 'Syne', fontSize: 18, fontWeight: FontWeight.w700, color: _kOrange))) : null),
+                  child: u.avatarUrl.isEmpty ? Center(child: Text(u.initials, style: const TextStyle( fontSize: 18, fontWeight: FontWeight.w700, color: _kOrange))) : null),
               const SizedBox(width: 14),
               Expanded(child: _editing
               // Edit mode
@@ -1243,7 +1243,7 @@ class _UserDetailPageState extends State<_UserDetailPage> with SingleTickerProvi
               // View mode
                   : Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                 Text(u.fullName.isNotEmpty ? u.fullName : u.email,
-                    style: const TextStyle(fontFamily: 'Syne', fontSize: 16, fontWeight: FontWeight.w800)),
+                    style: const TextStyle( fontSize: 16, fontWeight: FontWeight.w800)),
                 Text(u.email, style: const TextStyle(fontSize: 12, color: _kGrey)),
                 if (u.phone.isNotEmpty) Text(u.phone, style: const TextStyle(fontSize: 12, color: _kGrey)),
                 if (u.city.isNotEmpty)  Text('${u.city}, ${u.postcode}, ${u.country}', style: const TextStyle(fontSize: 12, color: _kLightGrey)),
@@ -1259,7 +1259,7 @@ class _UserDetailPageState extends State<_UserDetailPage> with SingleTickerProvi
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
                   child: _saving
                       ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
-                      : const Text('Save Changes', style: TextStyle(color: Colors.white, fontFamily: 'Syne', fontWeight: FontWeight.w700)),
+                      : const Text('Save Changes', style: TextStyle(color: Colors.white,  fontWeight: FontWeight.w700)),
                 ),
               ),
             ],
@@ -1275,7 +1275,7 @@ class _UserDetailPageState extends State<_UserDetailPage> with SingleTickerProvi
             const SizedBox(height: 12),
             TabBar(
               controller: _tabs,
-              labelStyle: const TextStyle(fontFamily: 'Syne', fontSize: 12, fontWeight: FontWeight.w700),
+              labelStyle: const TextStyle( fontSize: 12, fontWeight: FontWeight.w700),
               unselectedLabelStyle: const TextStyle(fontSize: 12),
               labelColor: _kOrange, unselectedLabelColor: _kGrey, indicatorColor: _kOrange,
               tabs: const [Tab(text: 'Shipments'), Tab(text: 'Addresses'), Tab(text: 'Info')],
@@ -1383,7 +1383,7 @@ class _UserStat extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 8),
       decoration: BoxDecoration(color: color.withOpacity(0.07), border: Border.all(color: color.withOpacity(0.2)), borderRadius: BorderRadius.circular(8)),
       child: Column(children: [
-        Text(value, style: TextStyle(fontFamily: 'Syne', fontSize: 11, fontWeight: FontWeight.w800, color: color), maxLines: 1, overflow: TextOverflow.ellipsis),
+        Text(value, style: TextStyle( fontSize: 11, fontWeight: FontWeight.w800, color: color), maxLines: 1, overflow: TextOverflow.ellipsis),
         Text(label, style: const TextStyle(fontSize: 9, color: _kGrey)),
       ])));
 }
@@ -1495,7 +1495,7 @@ class _BulkOrderDetailPageState extends State<_BulkOrderDetailPage> {
                   child: const Icon(Icons.arrow_back_ios, size: 16, color: Color(0xFF6B6B6B))),
               const SizedBox(width: 8),
               Expanded(child: Text(b.batchName.isNotEmpty ? b.batchName : 'Bulk Order',
-                  style: const TextStyle(fontFamily: 'Syne', fontSize: 18, fontWeight: FontWeight.w800),
+                  style: const TextStyle( fontSize: 18, fontWeight: FontWeight.w800),
                   overflow: TextOverflow.ellipsis)),
               Container(padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                   decoration: BoxDecoration(color: b.statusColor.withOpacity(0.1), borderRadius: BorderRadius.circular(20)),
@@ -1742,7 +1742,7 @@ class _ShipmentDetailSheet extends StatelessWidget {
           // Header
           Row(children: [
             Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              const Text('Shipment Details', style: TextStyle(fontFamily: 'Syne', fontSize: 18, fontWeight: FontWeight.w800)),
+              const Text('Shipment Details', style: TextStyle( fontSize: 18, fontWeight: FontWeight.w800)),
               Text(_fmtDateTime(s.createdAt), style: const TextStyle(fontSize: 12, color: _kGrey)),
             ])),
             Container(padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
@@ -1821,7 +1821,7 @@ class _ShipmentDetailSheet extends StatelessWidget {
                 label: const Text('Download Label PDF'),
                 style: ElevatedButton.styleFrom(backgroundColor: _kPurple, foregroundColor: Colors.white,
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                    textStyle: const TextStyle(fontFamily: 'Syne', fontSize: 14, fontWeight: FontWeight.w700)),
+                    textStyle: const TextStyle( fontSize: 14, fontWeight: FontWeight.w700)),
               ),
             ),
           ],
@@ -1839,7 +1839,7 @@ class _DetailSection extends StatelessWidget {
   final String title; final List<Widget> rows;
   const _DetailSection(this.title, this.rows);
   @override Widget build(BuildContext context) => Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-    Text(title, style: const TextStyle(fontFamily: 'Syne', fontSize: 13, fontWeight: FontWeight.w700)),
+    Text(title, style: const TextStyle( fontSize: 13, fontWeight: FontWeight.w700)),
     const SizedBox(height: 8),
     Container(padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
         decoration: BoxDecoration(color: const Color(0xFFF8F8F8), borderRadius: BorderRadius.circular(10), border: Border.all(color: _kBorder)),
@@ -1912,7 +1912,7 @@ class _CsvDownloadSheet extends StatelessWidget {
         const SizedBox(height: 20),
 
         const Text('How would you like to export?',
-            style: TextStyle(fontFamily: 'Syne', fontSize: 15, fontWeight: FontWeight.w700)),
+            style: TextStyle( fontSize: 15, fontWeight: FontWeight.w700)),
         const SizedBox(height: 16),
 
         // Copy to clipboard

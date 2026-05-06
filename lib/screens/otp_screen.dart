@@ -261,7 +261,7 @@ class _OtpScreenState extends State<OtpScreen> {
                                     keyboardType: TextInputType.number,
                                     textAlign: TextAlign.center,
                                     maxLength: 1,
-                                    style: const TextStyle(fontFamily: 'Syne',
+                                    style: const TextStyle(
                                         fontSize: 22, fontWeight: FontWeight.w700,
                                         color: Color(0xFF1A1A1A)),
                                     decoration: InputDecoration(
@@ -323,7 +323,7 @@ class _OtpScreenState extends State<OtpScreen> {
                                   disabledBackgroundColor: const Color(0xFFFFB899),
                                   elevation: 0,
                                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                                  textStyle: const TextStyle(fontFamily: 'Syne',
+                                  textStyle: const TextStyle(
                                       fontSize: 15, fontWeight: FontWeight.w700),
                                 ),
                                 child: isLoading

@@ -222,7 +222,7 @@ class _YourShipmentsScreenState extends State<YourShipmentsScreen>
             indicatorColor: const Color(0xFFFF5A00),
             indicatorWeight: 2.5,
             labelStyle: const TextStyle(
-                fontFamily: 'Syne', fontSize: 13, fontWeight: FontWeight.w700),
+                 fontSize: 13, fontWeight: FontWeight.w700),
             unselectedLabelStyle: const TextStyle(fontSize: 13),
             tabs: [
               Tab(text: 'Shipments (${all.length})'),
@@ -340,7 +340,7 @@ class _YourShipmentsScreenState extends State<YourShipmentsScreen>
                 child: const Icon(Icons.layers_outlined, size: 36,
                     color: Color(0xFFDDDDDD))),
             const SizedBox(height: 16),
-            const Text('No bulk orders yet', style: TextStyle(fontFamily: 'Syne',
+            const Text('No bulk orders yet', style: TextStyle(
                 fontSize: 18, fontWeight: FontWeight.w800, color: Color(0xFF1A1A1A))),
             const SizedBox(height: 6),
             const Text('Your bulk batch history will appear here.',
@@ -387,7 +387,7 @@ class _YourShipmentsScreenState extends State<YourShipmentsScreen>
               ),
               child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                 const Text('Bulk Order Summary', style: TextStyle(
-                    fontFamily: 'Syne', fontSize: 13,
+                     fontSize: 13,
                     fontWeight: FontWeight.w700, color: Colors.white)),
                 const SizedBox(height: 14),
                 Row(children: [
@@ -429,7 +429,7 @@ class _BulkSummaryTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Expanded(child: Column(
     crossAxisAlignment: CrossAxisAlignment.start, children: [
-    Text(value, style: TextStyle(fontFamily: 'Syne', fontSize: 18,
+    Text(value, style: TextStyle( fontSize: 18,
         fontWeight: FontWeight.w800, color: color),
         overflow: TextOverflow.ellipsis),
     Text(label, style: TextStyle(fontSize: 10,
@@ -545,7 +545,7 @@ class _BatchDetailScreenState extends State<_BatchDetailScreen> {
             const SizedBox(width: 14),
             Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(b.batchName, style: const TextStyle(fontFamily: 'Syne',
+                  Text(b.batchName, style: const TextStyle(
                       fontSize: 17, fontWeight: FontWeight.w800,
                       color: Color(0xFF1A1A1A))),
                   Text(dateStr,
@@ -654,7 +654,7 @@ class _BStat extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Expanded(child: Column(
       crossAxisAlignment: CrossAxisAlignment.start, children: [
-    Text(value, style: TextStyle(fontFamily: 'Syne', fontSize: 16,
+    Text(value, style: TextStyle( fontSize: 16,
         fontWeight: FontWeight.w800, color: color),
         overflow: TextOverflow.ellipsis),
     Text(label, style: const TextStyle(fontSize: 10, color: Color(0xFF9B9B9B))),
@@ -789,7 +789,7 @@ class _BatchLabelCard extends StatelessWidget {
               // Price + status + chevron
               Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
                 Text('£${price.toStringAsFixed(2)}', style: const TextStyle(
-                    fontFamily: 'Syne', fontSize: 14,
+                     fontSize: 14,
                     fontWeight: FontWeight.w800, color: Color(0xFF1A1A1A))),
                 if (tracking.isNotEmpty) ...[
                   const SizedBox(height: 4),
@@ -942,7 +942,7 @@ class _BulkOrderCard extends StatelessWidget {
                       color: Color(0xFFFF5A00), size: 16)),
               const SizedBox(width: 10),
               Expanded(child: Text(b.batchName, style: const TextStyle(
-                  fontFamily: 'Syne', fontSize: 14,
+                   fontSize: 14,
                   fontWeight: FontWeight.w800, color: Color(0xFF1A1A1A)))),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
@@ -1027,7 +1027,7 @@ class _BulkStat extends StatelessWidget {
   Widget build(BuildContext context) => Padding(
     padding: const EdgeInsets.only(right: 16),
     child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      Text(value, style: TextStyle(fontFamily: 'Syne', fontSize: 18,
+      Text(value, style: TextStyle( fontSize: 18,
           fontWeight: FontWeight.w800, color: color)),
       Text(label, style: const TextStyle(
           fontSize: 10, color: Color(0xFF9B9B9B))),
@@ -1061,7 +1061,7 @@ class _TopBar extends StatelessWidget {
       const SizedBox(width: 14),
       const Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Your Shipments', style: TextStyle(fontFamily: 'Syne',
+            Text('Your Shipments', style: TextStyle(
                 fontSize: 18, fontWeight: FontWeight.w800,
                 color: Color(0xFF1A1A1A))),
             Text('All your parcel history',
@@ -1130,7 +1130,7 @@ class _Stat extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Column(
       crossAxisAlignment: CrossAxisAlignment.start, children: [
-    Text('$value', style: TextStyle(fontFamily: 'Syne', fontSize: 20,
+    Text('$value', style: TextStyle( fontSize: 20,
         fontWeight: FontWeight.w800, color: color)),
     Text(label, style: const TextStyle(fontSize: 10, color: Color(0xFF9B9B9B),
         fontWeight: FontWeight.w500)),
@@ -1483,7 +1483,7 @@ class _SortSheet extends StatelessWidget {
               borderRadius: BorderRadius.circular(2))),
       const SizedBox(height: 16),
       const Align(alignment: Alignment.centerLeft,
-          child: Text('Sort Shipments', style: TextStyle(fontFamily: 'Syne',
+          child: Text('Sort Shipments', style: TextStyle(
               fontSize: 16, fontWeight: FontWeight.w800,
               color: Color(0xFF1A1A1A)))),
       const SizedBox(height: 12),
@@ -1543,7 +1543,7 @@ class _EmptyState extends StatelessWidget {
           child: const Icon(Icons.inventory_2_outlined,
               size: 36, color: Color(0xFFDDDDDD))),
       const SizedBox(height: 16),
-      const Text('No shipments yet', style: TextStyle(fontFamily: 'Syne',
+      const Text('No shipments yet', style: TextStyle(
           fontSize: 18, fontWeight: FontWeight.w800, color: Color(0xFF1A1A1A))),
       const SizedBox(height: 6),
       const Text('Your parcel history will appear here\nonce you send your first shipment.',
@@ -1575,7 +1575,7 @@ class _NoResultsState extends StatelessWidget {
     child: Column(mainAxisSize: MainAxisSize.min, children: [
       const Icon(Icons.search_off_rounded, size: 48, color: Color(0xFFDDDDDD)),
       const SizedBox(height: 16),
-      const Text('No matches found', style: TextStyle(fontFamily: 'Syne',
+      const Text('No matches found', style: TextStyle(
           fontSize: 16, fontWeight: FontWeight.w800, color: Color(0xFF1A1A1A))),
       const SizedBox(height: 6),
       Text(query.isNotEmpty
