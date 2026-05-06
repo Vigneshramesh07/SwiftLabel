@@ -174,9 +174,6 @@ class _BulkOrderScreenState extends State<BulkOrderScreen> {
 
   static const bool _useLivePayment = true;
 
-  static const _stripeSecretKey = _useLivePayment
-      ? 'sk_live_YOUR_STRIPE_LIVE_SECRET_KEY_HERE'
-      : 'sk_test_YOUR_STRIPE_TEST_SECRET_KEY_HERE';
   static const _anonKey       = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRqcmplZW1hYWN1bWVwaW1qbHRnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQxMjE2NjAsImV4cCI6MjA4OTY5NzY2MH0.gtBcFu-J48mPDk_S9ukfVdW-7gUmabGatmJ1g1_5zzo';
   static const _shipEngineUrl = 'https://tjrjeemaacumepimjltg.supabase.co/functions/v1/shipengine-courier';
   static const _emailUrl      = 'https://tjrjeemaacumepimjltg.supabase.co/functions/v1/send-label-email';

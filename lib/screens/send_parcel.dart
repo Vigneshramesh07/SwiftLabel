@@ -196,14 +196,6 @@ class _SendParcelScreenState extends State<SendParcelScreen> {
     }
   }
 
-  static const _stripePublishableKey = _useLivePayment
-      ? 'pk_live_YOUR_STRIPE_LIVE_PUBLISHABLE_KEY_HERE'
-      : 'pk_test_YOUR_STRIPE_TEST_PUBLISHABLE_KEY_HERE';
-
-  static const _stripeSecretKey = _useLivePayment
-      ? 'sk_live_YOUR_STRIPE_LIVE_SECRET_KEY_HERE'
-      : 'sk_test_YOUR_STRIPE_TEST_SECRET_KEY_HERE';
-
   static const _emailUrl =
       'https://tjrjeemaacumepimjltg.supabase.co/functions/v1/send-label-email';
   static const _anonKey =

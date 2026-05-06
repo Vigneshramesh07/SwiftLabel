@@ -212,34 +212,34 @@ class _OtpScreenState extends State<OtpScreen> {
 
                             const SizedBox(height: 16),
 
-                            // ── Demo info banner ──────────
-                            if (isDemo)
-                              Container(
-                                width: double.infinity,
-                                padding: const EdgeInsets.all(12),
-                                margin: const EdgeInsets.only(bottom: 8),
-                                decoration: BoxDecoration(
-                                  color: const Color(0xFFF0F7FF),
-                                  borderRadius: BorderRadius.circular(10),
-                                  border: Border.all(color: const Color(0xFFB5D4F4)),
-                                ),
-                                child: const Row(children: [
-                                  Icon(Icons.preview_rounded,
-                                      size: 14, color: Color(0xFF378ADD)),
-                                  SizedBox(width: 8),
-                                  Expanded(
-                                    child: Text(
-                                      'Demo review — OTP 123456 auto-filled. Logging you in...',
-                                      style: TextStyle(
-                                          fontSize: 12,
-                                          color: Color(0xFF185FA5),
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                  ),
-                                ]),
-                              ),
-
-                            const SizedBox(height: 16),
+                            // // ── Demo info banner ──────────
+                            // if (isDemo)
+                            //   Container(
+                            //     width: double.infinity,
+                            //     padding: const EdgeInsets.all(12),
+                            //     margin: const EdgeInsets.only(bottom: 8),
+                            //     decoration: BoxDecoration(
+                            //       color: const Color(0xFFF0F7FF),
+                            //       borderRadius: BorderRadius.circular(10),
+                            //       border: Border.all(color: const Color(0xFFB5D4F4)),
+                            //     ),
+                            //     child: const Row(children: [
+                            //       Icon(Icons.preview_rounded,
+                            //           size: 14, color: Color(0xFF378ADD)),
+                            //       SizedBox(width: 8),
+                            //       Expanded(
+                            //         child: Text(
+                            //           'Demo review — OTP 123456 auto-filled. Logging you in...',
+                            //           style: TextStyle(
+                            //               fontSize: 12,
+                            //               color: Color(0xFF185FA5),
+                            //               fontWeight: FontWeight.w500),
+                            //         ),
+                            //       ),
+                            //     ]),
+                            //   ),
+                            //
+                            // const SizedBox(height: 16),
 
                             const Align(
                               alignment: Alignment.centerLeft,

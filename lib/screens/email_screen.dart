@@ -217,45 +217,45 @@ class _EmailScreenState extends State<EmailScreen> {
                               ),
                               const SizedBox(height: 16),
 
-                              // ── Demo Login Banner ─────────
-                              GestureDetector(
-                                onTap: isLoading ? null : _handleDemoLogin,
-                                child: Container(
-                                  width: double.infinity,
-                                  padding: const EdgeInsets.all(14),
-                                  decoration: BoxDecoration(
-                                    color: const Color(0xFFF0F7FF),
-                                    borderRadius: BorderRadius.circular(10),
-                                    border: Border.all(color: const Color(0xFFB5D4F4)),
-                                  ),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      const Row(children: [
-                                        Icon(Icons.preview_rounded,
-                                            size: 14, color: Color(0xFF378ADD)),
-                                        SizedBox(width: 6),
-                                        Text('Demo Access',
-                                            style: TextStyle(
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.w700,
-                                                color: Color(0xFF185FA5))),
-                                      ]),
-                                      const SizedBox(height: 8),
-                                      _DemoRow(label: 'Email', value: _demoEmail),
-                                      const SizedBox(height: 4),
-                                      const _DemoRow(label: 'OTP', value: '123456'),
-                                      const SizedBox(height: 8),
-                                      const Text('Tap to auto-fill and continue →',
-                                          style: TextStyle(
-                                              fontSize: 11,
-                                              color: Color(0xFF378ADD),
-                                              fontWeight: FontWeight.w500)),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(height: 16),
+                              // // ── Demo Login Banner ─────────
+                              // GestureDetector(
+                              //   onTap: isLoading ? null : _handleDemoLogin,
+                              //   child: Container(
+                              //     width: double.infinity,
+                              //     padding: const EdgeInsets.all(14),
+                              //     decoration: BoxDecoration(
+                              //       color: const Color(0xFFF0F7FF),
+                              //       borderRadius: BorderRadius.circular(10),
+                              //       border: Border.all(color: const Color(0xFFB5D4F4)),
+                              //     ),
+                              //     child: Column(
+                              //       crossAxisAlignment: CrossAxisAlignment.start,
+                              //       children: [
+                              //         const Row(children: [
+                              //           Icon(Icons.preview_rounded,
+                              //               size: 14, color: Color(0xFF378ADD)),
+                              //           SizedBox(width: 6),
+                              //           Text('Demo Access',
+                              //               style: TextStyle(
+                              //                   fontSize: 12,
+                              //                   fontWeight: FontWeight.w700,
+                              //                   color: Color(0xFF185FA5))),
+                              //         ]),
+                              //         const SizedBox(height: 8),
+                              //         _DemoRow(label: 'Email', value: _demoEmail),
+                              //         const SizedBox(height: 4),
+                              //         const _DemoRow(label: 'OTP', value: '123456'),
+                              //         const SizedBox(height: 8),
+                              //         const Text('Tap to auto-fill and continue →',
+                              //             style: TextStyle(
+                              //                 fontSize: 11,
+                              //                 color: Color(0xFF378ADD),
+                              //                 fontWeight: FontWeight.w500)),
+                              //       ],
+                              //     ),
+                              //   ),
+                              // ),
+                              // const SizedBox(height: 16),
 
                               // ── Send Button ───────────────
                               SizedBox(

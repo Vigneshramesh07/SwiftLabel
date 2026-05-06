@@ -1,5 +1,6 @@
 // lib/main.dart
 
+import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
@@ -23,6 +24,11 @@ final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 final FlutterLocalNotificationsPlugin localNotifications =
 FlutterLocalNotificationsPlugin();
 
+Future<void> requestTracking() async {
+  final status = await AppTrackingTransparency.requestTrackingAuthorization();
+  print('Tracking status: $status');
+}
+
 // ── Background handler — must be top-level function ───────────────
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -37,6 +43,7 @@ void main() async {
 
   Stripe.publishableKey = 'pk_live_51TEACkDQs85qYTWQe3RJjYHH1LjL1RYJtHQWMdRTtwSKgLj6NQMg9oK0Jx5yJIqcFRQkYSKyoaVAtjDUy1y2c7kd00UKojDycL';
   await Stripe.instance.applySettings();
+  await requestTracking();
 
   // ── Firebase ──────────────────────────────────────────────────
   await Firebase.initializeApp(
