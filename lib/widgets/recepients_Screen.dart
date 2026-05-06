@@ -36,7 +36,6 @@ class Step2Controller {
   String?       selectedState;
   bool          pcValid = false;
 
-  // Availability state — read by send_parcel.dart to block Continue
   _AvailStatus availStatus   = _AvailStatus.idle;
   int          availCount    = 0;
   String       availError    = '';
@@ -47,6 +46,11 @@ class Step2Controller {
   bool get serviceChecked =>
       availStatus != _AvailStatus.idle &&
           availStatus != _AvailStatus.checking;
+
+  /// Only true when ShipEngine CONFIRMED zero services exist.
+  /// error / idle / checking all return false so user can still proceed.
+  bool get serviceDefinitelyUnavailable =>
+      availStatus == _AvailStatus.unavailable && availCount == 0;
 
   String get dialCode =>
       isInternational ? (selectedCountry?.dialCode ?? '+?') : '+44';
@@ -109,8 +113,6 @@ class Step2Controller {
 
 class RecipientDetailsStep extends StatefulWidget {
   final Step2Controller controller;
-
-  /// Sender postcode needed to call Shippo for availability
   final String senderPostcode;
 
   const RecipientDetailsStep({
@@ -126,19 +128,18 @@ class RecipientDetailsStep extends StatefulWidget {
 class _RecipientDetailsStepState extends State<RecipientDetailsStep> {
   Step2Controller get c => widget.controller;
 
-  // ── Postcode lookup state ─────────────────────────────────────
   bool         _pcLookingUp      = false;
   bool         _pcLookedUp       = false;
   String       _pcError          = '';
   List<String> _streetList       = [];
   String?      _selectedStreet;
   Timer?       _pcDebounce;
+  Timer?       _availDebounce;
 
-  // ── Shippo endpoints ──────────────────────────────────────────
-  static const _baseUrl    = 'https://tjrjeemaacumepimjltg.supabase.co/functions/v1';
-  static const _shippoUrl  = '$_baseUrl/shippo-courier';
-  static const _compareUrl = '$_baseUrl/compareRates';
-  static const _anonKey    =
+  // FIX: use shipengine-courier not shippo or compareRates
+  static const _baseUrl      = 'https://tjrjeemaacumepimjltg.supabase.co/functions/v1';
+  static const _engineUrl    = '$_baseUrl/shipengine-courier';
+  static const _anonKey      =
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRqcmplZW1hYWN1bWVwaW1qbHRnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQxMjE2NjAsImV4cCI6MjA4OTY5NzY2MH0.gtBcFu-J48mPDk_S9ukfVdW-7gUmabGatmJ1g1_5zzo';
 
   static const _headers = {
@@ -149,6 +150,7 @@ class _RecipientDetailsStepState extends State<RecipientDetailsStep> {
   @override
   void dispose() {
     _pcDebounce?.cancel();
+    _availDebounce?.cancel();
     super.dispose();
   }
 
@@ -164,7 +166,6 @@ class _RecipientDetailsStepState extends State<RecipientDetailsStep> {
     return raw.trim().toUpperCase();
   }
 
-  // ── Postcode field onChange ───────────────────────────────────
   void _onPostcodeChanged(String value) {
     _pcDebounce?.cancel();
     setState(() {
@@ -186,7 +187,6 @@ class _RecipientDetailsStepState extends State<RecipientDetailsStep> {
     });
   }
 
-  // ── Postcode lookup via postcodes.io ──────────────────────────
   Future<void> _lookupPostcode(String postcode) async {
     setState(() { _pcLookingUp = true; _pcError = ''; });
 
@@ -199,8 +199,8 @@ class _RecipientDetailsStepState extends State<RecipientDetailsStep> {
 
       if (res.statusCode != 200 || data['status'] != 200) {
         setState(() {
-          _pcError      = 'Invalid postcode. Please check and try again.';
-          _pcLookingUp  = false;
+          _pcError     = 'Invalid postcode. Please check and try again.';
+          _pcLookingUp = false;
         });
         return;
       }
@@ -213,6 +213,18 @@ class _RecipientDetailsStepState extends State<RecipientDetailsStep> {
 
       final formatted = _formatUkPc(postcode);
 
+      final normalize = (String s) =>
+          s.trim().toUpperCase().replaceAll(' ', '');
+      if (normalize(formatted) == normalize(widget.senderPostcode)) {
+        setState(() {
+          c.pcValid    = false;
+          _pcLookedUp  = false;
+          _pcError     = 'Recipient postcode must differ from sender';
+          _pcLookingUp = false;
+        });
+        return;
+      }
+
       setState(() {
         c.pcCtrl.text   = formatted;
         c.cityCtrl.text = city;
@@ -220,27 +232,14 @@ class _RecipientDetailsStepState extends State<RecipientDetailsStep> {
         _pcLookedUp     = true;
       });
 
-      // Check same-as-sender
-      final normalize = (String s) =>
-          s.trim().toUpperCase().replaceAll(' ', '');
-      if (normalize(formatted) == normalize(widget.senderPostcode)) {
-        setState(() {
-          c.pcValid   = false;
-          _pcLookedUp = false;
-          _pcError    = 'Recipient postcode must differ from sender';
-          _pcLookingUp = false;
-        });
-        return;
-      }
-
       final lat = result['latitude']  as double?;
       final lng = result['longitude'] as double?;
       if (lat != null && lng != null) {
         await _loadNearbyStreets(lat, lng);
       }
 
-      // Trigger availability check once city is set
-      c.resetAvailability();
+      // FIX: trigger availability check after postcode verified
+      _triggerAvailabilityCheck();
 
     } on TimeoutException {
       setState(() { _pcError = 'Request timed out. Please try again.'; });
@@ -254,12 +253,10 @@ class _RecipientDetailsStepState extends State<RecipientDetailsStep> {
     setState(() { _pcLookingUp = false; });
   }
 
-  // ── Nearby streets (Nominatim + Overpass) ────────────────────
   Future<void> _loadNearbyStreets(double lat, double lng) async {
     try {
       final Set<String> streets = {};
 
-      // 1. Reverse geocode for the primary road
       final revRes = await http.get(
         Uri.parse(
           'https://nominatim.openstreetmap.org/reverse'
@@ -275,7 +272,6 @@ class _RecipientDetailsStepState extends State<RecipientDetailsStep> {
         if (road != null) streets.add(road.toString());
       }
 
-      // 2. Nominatim bounded search (~400 m box)
       const delta = 0.004;
       final bbox  = '${lng - delta},${lat - delta},${lng + delta},${lat + delta}';
 
@@ -306,7 +302,6 @@ class _RecipientDetailsStepState extends State<RecipientDetailsStep> {
         }
       }
 
-      // 3. Overpass API — most reliable for actual road names
       final overpassRes = await http.post(
         Uri.parse('https://overpass-api.de/api/interpreter'),
         body: '[out:json][timeout:12];'
@@ -333,17 +328,26 @@ class _RecipientDetailsStepState extends State<RecipientDetailsStep> {
       }
     } catch (e) {
       debugPrint('[RecipPC] street lookup error: $e');
-      // Silently fail — user can type manually
     }
   }
 
-  // ── Check service availability ────────────────────────────────
+  // FIX: debounce availability so it doesn't fire on every keystroke
+  void _triggerAvailabilityCheck() {
+    _availDebounce?.cancel();
+    _availDebounce = Timer(const Duration(milliseconds: 800), () {
+      _checkAvailability();
+    });
+  }
+
+  // FIX: use shipengine-courier with correct dimensions for international
   Future<void> _checkAvailability() async {
     final toPostcode = c.postcode;
     final toCountry  = c.selectedCountry?.code ?? 'GB';
     final toCity     = c.cityCtrl.text.trim();
 
-    if (toCity.isEmpty && toPostcode.isEmpty) return;
+    // Need at least a country for international, or postcode for domestic
+    if (c.isInternational && c.selectedCountry == null) return;
+    if (!c.isInternational && toPostcode.length < 5) return;
 
     setState(() {
       c.availStatus = _AvailStatus.checking;
@@ -352,133 +356,75 @@ class _RecipientDetailsStepState extends State<RecipientDetailsStep> {
     });
 
     try {
-      List<dynamic> rates = [];
+      // FIX: use sm dimensions (45×35×16cm) for availability check
+      // xs (16×12×4cm) caused "invalid dimensions" for intl carriers
+      final shipmentPayload = {
+        'sender': {
+          'name':     'Sender',
+          'address':  '1 High Street',
+          'city':     'London',
+          'postcode': widget.senderPostcode.isNotEmpty
+              ? widget.senderPostcode : 'SW1A 1AA',
+          'country':  'GB',
+          'phone':    '07700000000',
+          'email':    'sender@swiftlabel.app',
+        },
+        'recipient': {
+          'name':     c.nameCtrl.text.trim().isNotEmpty
+              ? c.nameCtrl.text.trim() : 'Recipient',
+          'address':  '1 Main Street',
+          'city':     toCity.isNotEmpty ? toCity : 'City',
+          'postcode': toPostcode.isNotEmpty ? toPostcode : '10001',
+          'state':    c.state,
+          // FIX: always send country explicitly
+          'country':  toCountry,
+          'phone':    '07700000000',
+          'email':    '',
+        },
+        'parcel': {
+          // FIX: use 'sm' not 'xs' — sm has valid intl dimensions
+          'size':      'sm',
+          'weight_kg': 1.0,
+        },
+      };
 
-      if (c.isInternational) {
-        try {
-          final res = await http.post(
-            Uri.parse(_compareUrl),
-            headers: _headers,
-            body: jsonEncode({
-              'action':        'compare_rates',
-              'fromPostcode':  widget.senderPostcode,
-              'toPostcode':    toPostcode,
-              'toCountry':     toCountry,
-              'toState':       c.state,
-              'toCity':        toCity,
-              'weightKg':      1.0,
-              'parcelSize':    'sm',
-              'international': true,
-              'shipment': {
-                'sender': {
-                  'name': 'Sender', 'address': '1 High Street',
-                  'city': 'London', 'postcode': widget.senderPostcode,
-                  'country': 'GB', 'phone': '07700000000', 'email': '',
-                },
-                'recipient': {
-                  'name': c.nameCtrl.text.trim().isNotEmpty
-                      ? c.nameCtrl.text.trim() : 'Recipient',
-                  'address': '1 Main Street',
-                  'city':     toCity.isNotEmpty ? toCity : 'City',
-                  'postcode': toPostcode.isNotEmpty ? toPostcode : '00000',
-                  'state':    c.state,
-                  'country':  toCountry,
-                  'phone':    '00000000000', 'email': '',
-                },
-                'parcel': {'size': 'sm', 'weight_kg': 1.0},
-              },
-            }),
-          ).timeout(const Duration(seconds: 20));
+      final res = await http.post(
+        Uri.parse(_engineUrl),
+        headers: _headers,
+        body: jsonEncode({
+          'action':        'get_rates',
+          'international': c.isInternational,
+          'toCountry':     toCountry,
+          'shipment':      shipmentPayload,
+        }),
+      ).timeout(const Duration(seconds: 25));
 
-          final data = jsonDecode(res.body);
-          if (res.statusCode == 200) {
-            rates = data['rates'] ?? data['results'] ?? data['data'] ?? [];
-          }
-        } catch (_) {}
+      final data = jsonDecode(res.body);
+      debugPrint('[Step2] availability check ${res.statusCode}: '
+          'success=${data['success']} '
+          'rates=${(data['rates'] as List?)?.length ?? 0}');
 
-        if (rates.isEmpty) {
-          final res = await http.post(
-            Uri.parse(_shippoUrl),
-            headers: _headers,
-            body: jsonEncode({
-              'action':        'get_rates',
-              'international': true,
-              'toCountry':     toCountry,
-              'shipment': {
-                'sender': {
-                  'name': 'Sender', 'address': '1 High Street',
-                  'city': 'London', 'postcode': widget.senderPostcode,
-                  'country': 'GB', 'phone': '07700000000', 'email': '',
-                },
-                'recipient': {
-                  'name':     'Recipient',
-                  'address':  '1 Main Street',
-                  'city':     toCity.isNotEmpty ? toCity : 'City',
-                  'postcode': toPostcode.isNotEmpty ? toPostcode : '00000',
-                  'state':    c.state,
-                  'country':  toCountry,
-                  'phone':    '00000000000', 'email': '',
-                },
-                'parcel': {'size': 'sm', 'weight_kg': 1.0},
-              },
-            }),
-          ).timeout(const Duration(seconds: 20));
+      if (res.statusCode == 200 && data['success'] == true) {
+        final rates = data['rates'] as List? ?? [];
+        final validRates = rates.where((r) =>
+        r is Map &&
+            (double.tryParse(r['price']?.toString() ?? '') ?? 0) > 0
+        ).toList();
 
-          final data = jsonDecode(res.body);
-          if (res.statusCode == 200 && data['success'] == true) {
-            rates = data['rates'] ?? [];
-          }
-        }
+        setState(() {
+          c.availCount  = validRates.length;
+          c.availStatus = validRates.isNotEmpty
+              ? _AvailStatus.available
+              : _AvailStatus.unavailable;
+        });
       } else {
-        if (toPostcode.length < 5) {
-          setState(() => c.availStatus = _AvailStatus.idle);
-          return;
-        }
-        final res = await http.post(
-          Uri.parse(_shippoUrl),
-          headers: _headers,
-          body: jsonEncode({
-            'action': 'get_rates',
-            'shipment': {
-              'sender': {
-                'name': 'Sender', 'address': '1 High Street',
-                'city': 'London', 'postcode': widget.senderPostcode,
-                'country': 'GB', 'phone': '07700000000', 'email': '',
-              },
-              'recipient': {
-                'name':     'Recipient',
-                'address':  '1 Main Street',
-                'city':     toCity.isNotEmpty ? toCity : 'City',
-                'postcode': toPostcode,
-                'country':  'GB',
-                'phone':    '07700000000', 'email': '',
-              },
-              'parcel': {'size': 'sm', 'weight_kg': 1.0},
-            },
-          }),
-        ).timeout(const Duration(seconds: 20));
-
-        final data = jsonDecode(res.body);
-        if (res.statusCode == 200 && data['success'] == true) {
-          rates = data['rates'] ?? [];
-        }
+        // FIX: treat API error as "can still continue" not hard block
+        setState(() {
+          c.availStatus = _AvailStatus.error;
+          c.availError  = data['error']?.toString() ??
+              'Could not check availability. You can still continue.';
+        });
       }
-
-      final validRates = rates
-          .where((r) =>
-      r is Map &&
-          double.tryParse(
-              (r['price'] ?? r['amount'] ?? '0').toString()) != null &&
-          (double.tryParse(
-              (r['price'] ?? r['amount'] ?? '0').toString()) ?? 0) > 0)
-          .toList();
-
-      setState(() {
-        c.availCount  = validRates.length;
-        c.availStatus = validRates.isNotEmpty
-            ? _AvailStatus.available
-            : _AvailStatus.unavailable;
-      });
     } catch (e) {
       setState(() {
         c.availStatus = _AvailStatus.error;
@@ -514,6 +460,8 @@ class _RecipientDetailsStepState extends State<RecipientDetailsStep> {
           c.stateCtrl.clear();
           c.resetAvailability();
         });
+        // FIX: trigger availability check when country changes
+        _triggerAvailabilityCheck();
       },
     );
   }
@@ -525,11 +473,13 @@ class _RecipientDetailsStepState extends State<RecipientDetailsStep> {
       countryFlag: c.selectedCountry?.flag ?? '',
       states:      c.selectedCountry?.states ?? [],
       selected:    c.selectedState,
-      onSelected:  (s) => setState(() => c.selectedState = s),
+      onSelected:  (s) {
+        setState(() => c.selectedState = s);
+        _triggerAvailabilityCheck();
+      },
     );
   }
 
-  // ─────────────────────────────────────────────────────────────
   @override
   Widget build(BuildContext context) {
     final hasStates = c.hasStateDropdown;
@@ -540,7 +490,7 @@ class _RecipientDetailsStepState extends State<RecipientDetailsStep> {
 
         // ── Header ────────────────────────────────────────────────
         const Text('Step 2: Recipient Details',
-            style: TextStyle(fontFamily: 'Syne', fontSize: 18,
+            style: TextStyle( fontSize: 18,
                 fontWeight: FontWeight.w800, color: Color(0xFF1A1A1A))),
         const SizedBox(height: 4),
         const Text('Where should we deliver?',
@@ -641,7 +591,7 @@ class _RecipientDetailsStepState extends State<RecipientDetailsStep> {
               Icon(Icons.info_outline_rounded, size: 15, color: Color(0xFFF59E0B)),
               SizedBox(width: 8),
               Expanded(child: Text(
-                'International rates from DHL, FedEx, UPS & more — '
+                'International rates from Royal Mail, FedEx, DHL & more — '
                     'customs may apply at destination.',
                 style: TextStyle(fontSize: 11, color: Color(0xFF92400E), height: 1.4),
               )),
@@ -710,7 +660,7 @@ class _RecipientDetailsStepState extends State<RecipientDetailsStep> {
           const SizedBox(width: 10),
           Expanded(child: Column(
               crossAxisAlignment: CrossAxisAlignment.start, children: [
-            const _Label('Phone '),
+            const _Label('Phone'),
             const SizedBox(height: 6),
             Row(children: [
               GestureDetector(
@@ -752,22 +702,49 @@ class _RecipientDetailsStepState extends State<RecipientDetailsStep> {
 
         const SizedBox(height: 12),
 
-        // ── UK Postcode with lookup + street dropdown ─────────────
+        // ── UK Postcode + street ──────────────────────────────────
         if (!c.isInternational) ...[
           _buildUkPostcodeField(),
           const SizedBox(height: 12),
           _buildStreetField(),
         ],
 
-        // ── International ZIP ─────────────────────────────────────
+        // ── International ZIP + street ────────────────────────────
         if (c.isInternational) ...[
-          _FormField(
-            label: 'ZIP / Postal Code',
-            ctrl: c.zipCtrl,
-            hint: c.selectedCountry?.code == 'US' ? '10001' : '00000',
-          ),
+          // FIX: ZIP field with hint based on country
+          Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            const _Label('ZIP / Postal Code'),
+            const SizedBox(height: 6),
+            TextFormField(
+              controller: c.zipCtrl,
+              style: const TextStyle(fontSize: 14, color: Color(0xFF1A1A1A)),
+              keyboardType: TextInputType.text,
+              textCapitalization: TextCapitalization.characters,
+              onChanged: (_) => _triggerAvailabilityCheck(),
+              decoration: InputDecoration(
+                hintText: _zipHint(c.selectedCountry?.code),
+                hintStyle: const TextStyle(color: Color(0xFFB0B0B0), fontSize: 13),
+                filled: true,
+                fillColor: Colors.white,
+                contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 14, vertical: 13),
+                border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: const BorderSide(color: Color(0xFFE0E0E0))),
+                enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: const BorderSide(color: Color(0xFFE0E0E0))),
+                focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: const BorderSide(
+                        color: Color(0xFF0284C7), width: 1.5)),
+                errorBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: const BorderSide(color: Colors.red)),
+              ),
+            ),
+          ]),
           const SizedBox(height: 12),
-          // International street — plain text only
           _FormField(
             label: 'Street / Address Line *',
             ctrl: c.streetCtrl,
@@ -800,7 +777,7 @@ class _RecipientDetailsStepState extends State<RecipientDetailsStep> {
           ],
         ]),
 
-        // ── State dropdown ────────────────────────────────────────
+        // ── State dropdown (US, CA, AU etc.) ─────────────────────
         if (hasStates) ...[
           const SizedBox(height: 12),
           const _Label('State / Province *'),
@@ -843,13 +820,34 @@ class _RecipientDetailsStepState extends State<RecipientDetailsStep> {
           _FormField(
             label: 'State / Region (optional)',
             ctrl: c.stateCtrl,
-            hint: 'e.g. Bavaria',
+            hint: 'e.g. Tamil Nadu',
           ),
         ],
 
         const SizedBox(height: 20),
 
-        const SizedBox(height: 12),
+        // ── Availability checking indicator ───────────────────────
+        if (c.availStatus == _AvailStatus.checking) ...[
+          Container(
+            padding: const EdgeInsets.all(14),
+            decoration: BoxDecoration(
+              color: const Color(0xFFF8F8F8),
+              border: Border.all(color: const Color(0xFFEEEEEE)),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: const Row(children: [
+              SizedBox(
+                width: 16, height: 16,
+                child: CircularProgressIndicator(
+                    color: Color(0xFF0284C7), strokeWidth: 2),
+              ),
+              SizedBox(width: 12),
+              Text('Checking available courier services...',
+                  style: TextStyle(fontSize: 13, color: Color(0xFF6B6B6B))),
+            ]),
+          ),
+          const SizedBox(height: 8),
+        ],
 
         // ── AVAILABILITY RESULT BANNER ────────────────────────────
         if (c.availStatus == _AvailStatus.available) ...[
@@ -860,7 +858,7 @@ class _RecipientDetailsStepState extends State<RecipientDetailsStep> {
             borderColor: const Color(0xFFBBF7D0),
             title: '${c.availCount} service${c.availCount == 1 ? '' : 's'} available',
             subtitle: c.isInternational
-                ? 'DHL, FedEx, UPS & more ship to ${c.selectedCountry?.name ?? 'this destination'}'
+                ? 'Royal Mail, FedEx & more ship to ${c.selectedCountry?.name ?? 'this destination'}'
                 : 'Royal Mail, Evri, DPD & more deliver to this postcode',
             titleColor: const Color(0xFF059669),
           ),
@@ -872,10 +870,11 @@ class _RecipientDetailsStepState extends State<RecipientDetailsStep> {
             iconColor: Colors.red,
             bgColor: Colors.red.withOpacity(0.05),
             borderColor: Colors.red.withOpacity(0.2),
-            title: 'No services available',
+            title: 'No services found',
             subtitle: c.isInternational
-                ? 'We could not find courier services for ${c.selectedCountry?.name ?? 'this destination'}. Please check the details or try a different country.'
-                : 'No couriers found for this postcode. Please check the postcode and try again.',
+                ? 'No courier services found for ${c.selectedCountry?.name ?? 'this destination'}. '
+                'You can still try continuing — more services may appear once you fill in the full address.'
+                : 'No couriers found for this postcode. Please check and try again.',
             titleColor: Colors.red,
           ),
         ],
@@ -887,9 +886,7 @@ class _RecipientDetailsStepState extends State<RecipientDetailsStep> {
             bgColor: const Color(0xFFFFF8E1),
             borderColor: const Color(0xFFFFD54F),
             title: 'Could not check availability',
-            subtitle: c.availError.isNotEmpty
-                ? c.availError
-                : 'You can still continue — services will be shown in the next step.',
+            subtitle: 'You can still continue — courier options will be shown in the next step.',
             titleColor: const Color(0xFFF59E0B),
           ),
         ],
@@ -899,7 +896,23 @@ class _RecipientDetailsStepState extends State<RecipientDetailsStep> {
     );
   }
 
-  // ── UK Postcode field with spinner & verified tick ────────────
+  // ── ZIP hint based on country ─────────────────────────────────
+  String _zipHint(String? countryCode) {
+    switch (countryCode) {
+      case 'US': return '10001';
+      case 'CA': return 'M5V 2T6';
+      case 'AU': return '2000';
+      case 'IN': return '600001';
+      case 'SG': return '018956';
+      case 'DE': return '10115';
+      case 'FR': return '75001';
+      case 'JP': return '100-0001';
+      case 'AE': return '00000';
+      default:   return '00000';
+    }
+  }
+
+  // ── UK Postcode field ─────────────────────────────────────────
   Widget _buildUkPostcodeField() {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       const _Label('Postcode *'),
@@ -973,7 +986,7 @@ class _RecipientDetailsStepState extends State<RecipientDetailsStep> {
     ]);
   }
 
-  // ── Street field — dropdown when streets available, text otherwise
+  // ── Street field ──────────────────────────────────────────────
   Widget _buildStreetField() {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       const _Label('Street / Address Line *'),
@@ -1022,8 +1035,8 @@ class _RecipientDetailsStepState extends State<RecipientDetailsStep> {
                 _streetList     = [];
                 c.streetCtrl.clear();
               } else {
-                _selectedStreet    = val;
-                c.streetCtrl.text  = val ?? '';
+                _selectedStreet   = val;
+                c.streetCtrl.text = val ?? '';
               }
             });
           },
@@ -1070,7 +1083,7 @@ class _RecipientDetailsStepState extends State<RecipientDetailsStep> {
     ]);
   }
 
-  // ── City field — auto-filled with magic wand indicator ────────
+  // ── City field ────────────────────────────────────────────────
   Widget _buildCityField() {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       const _Label('City *'),
@@ -1079,8 +1092,12 @@ class _RecipientDetailsStepState extends State<RecipientDetailsStep> {
         controller: c.cityCtrl,
         style: const TextStyle(fontSize: 14, color: Color(0xFF1A1A1A)),
         validator: (v) => (v?.isEmpty ?? true) ? 'Required' : null,
+        onChanged: (_) {
+          // Re-trigger availability when city changes (for international)
+          if (c.isInternational) _triggerAvailabilityCheck();
+        },
         decoration: InputDecoration(
-          hintText: c.isInternational ? 'New York' : 'Manchester',
+          hintText: c.isInternational ? 'Mumbai' : 'Manchester',
           hintStyle: const TextStyle(color: Color(0xFFB0B0B0), fontSize: 13),
           filled: true,
           fillColor: c.pcValid && !c.isInternational
@@ -1124,7 +1141,7 @@ class _RecipientDetailsStepState extends State<RecipientDetailsStep> {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Availability banner widget
+// Availability banner
 // ─────────────────────────────────────────────────────────────────────────────
 
 class _AvailBanner extends StatelessWidget {

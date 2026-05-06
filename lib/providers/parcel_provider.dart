@@ -18,7 +18,7 @@ class ParcelSize {
 
 class CourierRate {
   final String rateId, carrier, service, currency, dropoff;
-  final String? carrierId, serviceCode; // ShipEngine specific
+  final String? carrierId, serviceCode;
   final double price;
   final int?   estimatedDays;
 
@@ -173,12 +173,9 @@ class Shipment {
 
 class ParcelProvider extends ChangeNotifier {
 
-  // ── ShipEngine via Supabase Edge Function ────────────────────
-  // Old function was: shippo-courier
-  // New function is:  shipengine-courier
-  static const _baseUrl      = 'https://tjrjeemaacumepimjltg.supabase.co/functions/v1';
-  static const _engineUrl    = '$_baseUrl/shipengine-courier'; // NEW
-  static const _anonKey      =
+  static const _baseUrl   = 'https://tjrjeemaacumepimjltg.supabase.co/functions/v1';
+  static const _engineUrl = '$_baseUrl/shipengine-courier';
+  static const _anonKey   =
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRqcmplZW1hYWN1bWVwaW1qbHRnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQxMjE2NjAsImV4cCI6MjA4OTY5NzY2MH0.gtBcFu-J48mPDk_S9ukfVdW-7gUmabGatmJ1g1_5zzo';
 
   final _supabase = Supabase.instance.client;
@@ -225,15 +222,18 @@ class ParcelProvider extends ChangeNotifier {
   // Submit
   bool   isLoading          = false;
   bool   isSubmitted        = false;
-  bool   requiresPickup     = false; // true when carrier needs collection scheduling
+  bool   requiresPickup     = false;
   String lastTrackingNumber = '';
   String lastLabelUrl       = '';
-  String lastLabelId        = ''; // ShipEngine label_id for pickup scheduling
+  String lastLabelId        = '';
   String errorMessage       = '';
 
   // Shipments
   List<Shipment> recentShipments    = [];
   bool           isLoadingShipments = false;
+
+  // Realtime
+  RealtimeChannel? _shipmentsChannel;
 
   // ── Static data ───────────────────────────────────────────────
   static const List<ParcelSize> sizes = [
@@ -251,6 +251,13 @@ class ParcelProvider extends ChangeNotifier {
     'Clothing', 'Electronics', 'Documents', 'Books', 'Fragile', 'Gifts', 'Other',
   ];
 
+  static const Map<String, double> sizeWeightLimits = {
+    'xs': 1.0,
+    'sm': 2.0,
+    'md': 10.0,
+    'lg': 30.0,
+  };
+
   // ── Getters ───────────────────────────────────────────────────
   ParcelSize? get selectedSize =>
       selectedSizeId.isEmpty ? null
@@ -266,13 +273,15 @@ class ParcelProvider extends ChangeNotifier {
     }
     return list;
   }
-  double get serviceFee {
-    if (selectedRate == null) return 0;
-    return ServiceFee.get(selectedSizeId, isInternational: isInternational);
-  }
+
+  double get serviceFee =>
+      selectedRate == null ? 0
+          : ServiceFee.get(selectedSizeId, isInternational: isInternational);
+
   double get shippingCost => selectedRate?.price ?? 0;
   double get totalCost    => shippingCost + serviceFee;
 
+  // ── FIX: use zip for international, postcode for domestic ─────
   String get _resolvedPostcode =>
       isInternational && recipZip.isNotEmpty ? recipZip : recipPostcode;
 
@@ -281,6 +290,7 @@ class ParcelProvider extends ChangeNotifier {
     'Authorization': 'Bearer $_anonKey',
   };
 
+  // ── FIX: always send country code explicitly in recipient ─────
   Map<String, dynamic> get _shipmentPayload => {
     'sender': {
       'name':     senderName,
@@ -288,18 +298,21 @@ class ParcelProvider extends ChangeNotifier {
       'city':     senderCity,
       'postcode': senderPostcode,
       'country':  'GB',
-      'phone':    senderPhone,
+      'phone':    senderPhone.isNotEmpty ? senderPhone : '07700000000',
       'email':    senderEmail,
     },
     'recipient': {
-      'name':     recipName,
-      'address':  '$recipDoor $recipStreet'.trim(),
-      'city':     recipCity,
+      'name':    recipName,
+      'address': '$recipDoor $recipStreet'.trim(),
+      'city':    recipCity,
+      // FIX: always send resolved postcode/zip
       'postcode': _resolvedPostcode,
-      'state':    recipState,
-      'country':  recipCountryCode,
-      'phone':    recipPhone,
-      'email':    '',
+      // FIX: always send state (required for US/CA/AU etc.)
+      'state':   recipState,
+      // FIX: explicitly send country code — edge function reads this
+      'country': recipCountryCode.isNotEmpty ? recipCountryCode : 'GB',
+      'phone':   recipPhone.isNotEmpty ? recipPhone : '07700000000',
+      'email':   '',
     },
     'parcel': {
       'size':      selectedSizeId,
@@ -307,10 +320,7 @@ class ParcelProvider extends ChangeNotifier {
     },
   };
 
-  // Add this field at the top of ParcelProvider
-  RealtimeChannel? _shipmentsChannel;
-
-// Replace getShipments() with this version that also sets up realtime
+  // ── GET SHIPMENTS ─────────────────────────────────────────────
   Future<void> getShipments(String userEmail) async {
     if (userEmail.isEmpty) return;
     isLoadingShipments = true;
@@ -331,7 +341,7 @@ class ParcelProvider extends ChangeNotifier {
     isLoadingShipments = false;
     notifyListeners();
 
-    // ── Set up realtime subscription ──────────────────────────
+    // ── Realtime subscription ──────────────────────────────────
     _shipmentsChannel?.unsubscribe();
     _shipmentsChannel = _supabase
         .channel('shipments:$userEmail')
@@ -356,41 +366,15 @@ class ParcelProvider extends ChangeNotifier {
         }
         notifyListeners();
       },
-    )
-        .subscribe();
+    ).subscribe();
   }
 
-// Call this when user logs out or provider is disposed
   void disposeRealtime() {
     _shipmentsChannel?.unsubscribe();
     _shipmentsChannel = null;
   }
-  // ── GET RATES via ShipEngine ──────────────────────────────────
-  Future<void> _startTracking(String trackingNumber, String carrierName) async {
-    const carrierCodeMap = {
-      'Royal Mail': 'stamps_com', 'Parcelforce Royal Mail': 'stamps_com',
-      'Parcelforce': 'stamps_com', 'Evri': 'evri',
-      'DPD UK': 'dpd', 'DPD': 'dpd',
-      'FedEx UK': 'fedex', 'FedEx': 'fedex',
-      'DHL Express MyDHL API': 'dhl_express', 'DHL Express': 'dhl_express',
-      'DHL': 'dhl_express', 'UPS': 'ups',
-      'Yodel': 'yodel', 'GlobalPost': 'globalpost',
-    };
-    try {
-      await http.post(
-        Uri.parse(_engineUrl),
-        headers: _headers,
-        body: jsonEncode({
-          'action': 'start_tracking',
-          'trackingNumber': trackingNumber,
-          'carrierCode': carrierCodeMap[carrierName] ?? 'stamps_com',
-        }),
-      ).timeout(const Duration(seconds: 10));
-      debugPrint('[ParcelProvider] ✓ Tracking started: $trackingNumber');
-    } catch (e) {
-      debugPrint('[ParcelProvider] ⚠ Start tracking error (non-fatal): $e');
-    }
-  }
+
+  // ── GET RATES ─────────────────────────────────────────────────
   Future<void> getRates() async {
     isLoadingRates = true;
     liveRates      = [];
@@ -400,17 +384,26 @@ class ParcelProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      debugPrint('[ParcelProvider] getRates → ${isInternational ? "INTL" : "DOMESTIC"} '
-          'GB → $recipCountryCode');
+      // FIX: ensure country code is always uppercase and valid
+      final countryCode = recipCountryCode.trim().toUpperCase();
+      final intl        = countryCode != 'GB';
+
+      debugPrint('[ParcelProvider] getRates → ${intl ? "INTL" : "DOMESTIC"} '
+          'GB → $countryCode  zip=$recipZip  postcode=$recipPostcode');
+
+      final payload = _shipmentPayload;
+
+      // FIX: double-check country is set correctly in payload
+      (payload['recipient'] as Map<String, dynamic>)['country'] = countryCode;
 
       final res = await http.post(
         Uri.parse(_engineUrl),
         headers: _headers,
         body: jsonEncode({
           'action':        'get_rates',
-          'international': isInternational,
-          'toCountry':     recipCountryCode,
-          'shipment':      _shipmentPayload,
+          'international': intl,           // FIX: use derived value not stored
+          'toCountry':     countryCode,    // FIX: send explicit country code
+          'shipment':      payload,
         }),
       ).timeout(const Duration(seconds: 30));
 
@@ -428,16 +421,20 @@ class ParcelProvider extends ChangeNotifier {
     }
 
     if (liveRates.isEmpty && ratesError.isEmpty) {
-      ratesError = isInternational
-          ? 'No international rates found for $recipCountryName.'
-          : 'No domestic rates available for this route.';
+      final countryCode = recipCountryCode.trim().toUpperCase();
+      final intl        = countryCode != 'GB';
+      ratesError = intl
+          ? 'No international rates found for $recipCountryName. '
+          'Please check the destination address details.'
+          : 'No domestic rates available for this route. '
+          'Please check the postcode.';
     }
 
     isLoadingRates = false;
     notifyListeners();
   }
 
-  // ── Parse ShipEngine rate response ───────────────────────────
+  // ── Parse rates ───────────────────────────────────────────────
   List<CourierRate> _parseRates(dynamic raw) {
     if (raw == null || raw is! List || raw.isEmpty) return [];
     final out = <CourierRate>[];
@@ -462,7 +459,7 @@ class ParcelProvider extends ChangeNotifier {
     return out;
   }
 
-  // ── BUY LABEL via ShipEngine ─────────────────────────────────
+  // ── BUY LABEL ─────────────────────────────────────────────────
   Future<void> buyLabel({required String userEmail}) async {
     if (selectedRate == null) {
       errorMessage = 'Please select a courier first.';
@@ -474,20 +471,27 @@ class ParcelProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      debugPrint('[ParcelProvider] buyLabel rateId=${selectedRate!.rateId}');
+      final countryCode = recipCountryCode.trim().toUpperCase();
+      final intl        = countryCode != 'GB';
+
+      debugPrint('[ParcelProvider] buyLabel carrier=${selectedRate!.carrier} '
+          'intl=$intl country=$countryCode');
+
+      final payload = _shipmentPayload;
+      (payload['recipient'] as Map<String, dynamic>)['country'] = countryCode;
 
       final res = await http.post(
         Uri.parse(_engineUrl),
         headers: _headers,
         body: jsonEncode({
           'action':        'create_label',
-          'rateId':        selectedRate!.rateId,     // preferred — direct buy
+          'rateId':        selectedRate!.rateId,
           'carrier':       selectedRate!.carrier,
           'carrierId':     selectedRate!.carrierId,
           'serviceCode':   selectedRate!.serviceCode,
-          'international': isInternational,
-          'toCountry':     recipCountryCode,
-          'shipment':      _shipmentPayload,
+          'international': intl,
+          'toCountry':     countryCode,
+          'shipment':      payload,
         }),
       ).timeout(const Duration(seconds: 30));
 
@@ -502,17 +506,17 @@ class ParcelProvider extends ChangeNotifier {
         isSubmitted        = true;
         await _saveShipmentToSupabase(userEmail: userEmail, data: data);
         await getShipments(userEmail);
-        // ── Start tracking so ShipEngine pushes webhook updates ──
         if (lastTrackingNumber.isNotEmpty) {
           await _startTracking(lastTrackingNumber, selectedRate!.carrier);
         }
-
         debugPrint('[ParcelProvider] ✓ Label: $lastTrackingNumber');
       } else {
         errorMessage = data['error'] ?? 'Failed to purchase label.';
+        isSubmitted  = false;
       }
     } catch (e) {
       errorMessage = 'Network error. Please try again.';
+      isSubmitted  = false;
       debugPrint('[ParcelProvider] buyLabel error: $e');
     }
 
@@ -520,12 +524,41 @@ class ParcelProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  // ── Save to Supabase (two-phase safe) ────────────────────────
+  // ── Start tracking ────────────────────────────────────────────
+  Future<void> _startTracking(String trackingNumber, String carrierName) async {
+    const carrierCodeMap = {
+      'Royal Mail': 'stamps_com', 'Parcelforce Royal Mail': 'stamps_com',
+      'Parcelforce': 'stamps_com', 'Evri': 'evri',
+      'DPD UK': 'dpd', 'DPD': 'dpd',
+      'FedEx UK': 'fedex', 'FedEx': 'fedex',
+      'DHL Express MyDHL API': 'dhl_express', 'DHL Express': 'dhl_express',
+      'DHL': 'dhl_express', 'UPS': 'ups',
+      'Yodel': 'yodel', 'GlobalPost': 'globalpost',
+    };
+    try {
+      await http.post(
+        Uri.parse(_engineUrl),
+        headers: _headers,
+        body: jsonEncode({
+          'action':        'start_tracking',
+          'trackingNumber': trackingNumber,
+          'carrierCode':    carrierCodeMap[carrierName] ?? 'stamps_com',
+        }),
+      ).timeout(const Duration(seconds: 10));
+      debugPrint('[ParcelProvider] ✓ Tracking started: $trackingNumber');
+    } catch (e) {
+      debugPrint('[ParcelProvider] ⚠ Start tracking error (non-fatal): $e');
+    }
+  }
+
+  // ── Save to Supabase ──────────────────────────────────────────
   Future<void> _saveShipmentToSupabase({
     required String userEmail,
     required Map<String, dynamic> data,
   }) async {
-    // Phase 1: core fields (always exist)
+    final countryCode = recipCountryCode.trim().toUpperCase();
+    final intl        = countryCode != 'GB';
+
     final coreRow = {
       'user_email':         userEmail,
       'tracking_number':    lastTrackingNumber,
@@ -561,13 +594,12 @@ class ParcelProvider extends ChangeNotifier {
       return;
     }
 
-    // Phase 2: international fields (safe — logs if columns missing)
     if (insertedId != null) {
       try {
         await _supabase.from('shipments').update({
-          'recipient_country': recipCountryCode,
+          'recipient_country': countryCode,
           'recipient_state':   recipState,
-          'is_international':  isInternational,
+          'is_international':  intl,
         }).eq('id', insertedId);
         debugPrint('[ParcelProvider] ✓ International fields saved');
       } catch (e) {
@@ -583,7 +615,6 @@ class ParcelProvider extends ChangeNotifier {
   }
 
   // ── Setters ───────────────────────────────────────────────────
-
   void setSenderDetails({
     required String name,   required String phone,
     required String email,  required String postcode,
@@ -606,22 +637,22 @@ class ParcelProvider extends ChangeNotifier {
     String state         = '',
     String zip           = '',
   }) {
-    recipName=name; recipPhone=phone; recipPostcode=postcode;
-    recipStreet=street; recipDoor=door; recipCity=city;
-    isInternational=international;
-    recipCountryCode=countryCode;
-    recipCountryName=countryName;
-    recipState=state;
-    recipZip=zip;
+    recipName    = name;
+    recipPhone   = phone;
+    recipPostcode= postcode;
+    recipStreet  = street;
+    recipDoor    = door;
+    recipCity    = city;
+    // FIX: always derive isInternational from countryCode, not the flag
+    recipCountryCode = countryCode.trim().toUpperCase().isNotEmpty
+        ? countryCode.trim().toUpperCase() : 'GB';
+    recipCountryName = countryName;
+    isInternational  = recipCountryCode != 'GB';
+    recipState       = state;
+    recipZip         = zip;
     notifyListeners();
   }
 
-  static const Map<String, double> sizeWeightLimits = {
-    'xs': 1.0,
-    'sm': 2.0,
-    'md': 10.0,
-    'lg': 30.0,
-  };
   void setSize(String id)       { selectedSizeId = id; notifyListeners(); }
   void setParcelType(String t)  { selectedParcelType = t; notifyListeners(); }
   void setWeight(String w)      { weightKg = w; notifyListeners(); }
@@ -632,6 +663,20 @@ class ParcelProvider extends ChangeNotifier {
     selectedRateId = rate.rateId;
     selectedRate   = rate;
     notifyListeners();
+  }
+
+  String? validateWeightForSize() {
+    if (selectedSizeId.isEmpty) return null;
+    if (weightKg.isEmpty) return 'Please enter the parcel weight.';
+    final weight = double.tryParse(weightKg);
+    if (weight == null || weight <= 0) return 'Please enter a valid weight.';
+    final max = sizeWeightLimits[selectedSizeId];
+    if (max != null && weight > max) {
+      final name = sizes.firstWhere((s) => s.id == selectedSizeId).name;
+      return '$name max is ${max % 1 == 0 ? max.toInt() : max}kg. '
+          'Please reduce weight or choose a larger size.';
+    }
+    return null;
   }
 
   void reset() {
@@ -647,20 +692,5 @@ class ParcelProvider extends ChangeNotifier {
     isLoading=false; isSubmitted=false; requiresPickup=false;
     lastTrackingNumber=''; lastLabelUrl=''; lastLabelId=''; errorMessage='';
     notifyListeners();
-  }
-  String? validateWeightForSize() {
-    if (selectedSizeId.isEmpty) return null;
-    if (weightKg.isEmpty) return 'Please enter the parcel weight.';
-
-    final weight = double.tryParse(weightKg);
-    if (weight == null || weight <= 0) return 'Please enter a valid weight.';
-
-    final max = sizeWeightLimits[selectedSizeId];
-    if (max != null && weight > max) {
-      final name = sizes.firstWhere((s) => s.id == selectedSizeId).name;
-      return '$name max is ${max % 1 == 0 ? max.toInt() : max}kg. '
-          'Please reduce weight or choose a larger size.';
-    }
-    return null;
   }
 }
